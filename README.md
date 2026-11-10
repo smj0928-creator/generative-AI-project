@@ -8,7 +8,8 @@
 
 - `index.html` — 루트 실행 파일
 - `css/style.css` — 화면 디자인과 모바일 레이아웃
-- `js/app.js` — 인터랙션과 localStorage 기능
+- `js/app.js` — 인터랙션, JSON 운동 템플릿 로드, localStorage 기능
+- `data/workout-templates.json` — 운동 목표별 주간 운동 템플릿 데이터
 - `wireframe.html` — 별도로 보존한 회색 와이어프레임
 - `.nojekyll` — GitHub Pages 정적 배포용
 
@@ -21,6 +22,8 @@ AItrainer-mobile-prototype/
 │  └─ style.css
 ├─ js/
 │  └─ app.js
+├─ data/
+│  └─ workout-templates.json
 ├─ wireframe.html
 ├─ README.md
 └─ .nojekyll
