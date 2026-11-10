@@ -19,6 +19,7 @@ async function loadWorkoutTemplates(){
    templates[goal]=items.map(item=>Array.isArray(item)?{title:item[0],summary:item[1],place:'home',workoutType:'bodyweight'}:item);
   });
  }catch(error){
+  Object.entries(templates).forEach(([goal,items])=>{templates[goal]=items.map(item=>Array.isArray(item)?{title:item[0],summary:item[1],place:'home',workoutType:'bodyweight'}:item)});
   console.warn('JSON 운동 데이터를 불러오지 못해 기본 데이터를 사용합니다',error);
  }
 }
@@ -48,10 +49,12 @@ async function repairSavedPlan(){
  if(!Array.isArray(set)||!set.length)return;
  let changed=false;
  state.plan=state.plan.map((w,i)=>{
-  if(w.title&&w.summary)return w;
+  const migrated={...w,place:w.place||state.place,workoutType:w.workoutType||state.workoutType};
+  if(!w.place||!w.workoutType)changed=true;
+  if(migrated.title&&migrated.summary)return migrated;
   changed=true;
   const item=set[i%set.length];
-  return {...w,title:item[0],summary:item[1],duration:w.duration||state.duration,level:w.level||state.level};
+  return {...migrated,title:item.title||item[0],summary:item.summary||item[1],duration:w.duration||state.duration,level:w.level||state.level};
  });
  if(changed)save();
 }
