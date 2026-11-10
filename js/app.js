@@ -14,7 +14,10 @@ async function loadWorkoutTemplates(){
   if(!response.ok)throw new Error('운동 데이터 파일을 불러오지 못했습니다');
   const data=await response.json();
   if(!data||typeof data!=='object'||Array.isArray(data))throw new Error('운동 데이터 형식이 올바르지 않습니다');
-  Object.assign(templates,data);
+  Object.entries(data).forEach(([goal,items])=>{
+   if(!Array.isArray(items))return;
+   templates[goal]=items.map(item=>Array.isArray(item)?item:[item.title,item.summary]);
+  });
  }catch(error){
   console.warn('JSON 운동 데이터를 불러오지 못해 기본 데이터를 사용합니다',error);
  }
