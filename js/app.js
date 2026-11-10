@@ -8,8 +8,20 @@ const templates={
  '근력 강화':[['하체 기초 근력','스쿼트 · 리버스 런지 · 힙브릿지'],['상체 기초 근력','니푸시업 · 숄더탭 · 슈퍼맨'],['전신 근력','스쿼트 · 푸시업 · 플랭크']],
  '유연성 향상':[['전신 모빌리티','캣카우 · 런지 스트레치 · 회전'],['하체 유연성','햄스트링 · 고관절 · 종아리'],['회복 스트레칭','목 · 어깨 · 척추 · 하체']]
 };
+async function loadWorkoutTemplates(){
+ try{
+  const response=await fetch('./data/workout-templates.json');
+  if(!response.ok)throw new Error('운동 데이터 파일을 불러오지 못했습니다');
+  const data=await response.json();
+  if(!data||typeof data!=='object'||Array.isArray(data))throw new Error('운동 데이터 형식이 올바르지 않습니다');
+  Object.assign(templates,data);
+ }catch(error){
+  console.warn('JSON 운동 데이터를 불러오지 못해 기본 데이터를 사용합니다',error);
+ }
+}
+const templatesReady=loadWorkoutTemplates();
 const save=()=>localStorage.setItem(KEY,JSON.stringify(state));
-function makePlan(){state.goal=$('#goal').value;state.level=$('#level').value;state.frequency=+$('#frequency').value;state.duration=+$('#duration').value;state.caution=$('#caution').value.trim();const set=templates[state.goal];state.plan=Array.from({length:state.frequency},(_,i)=>({id:Date.now()+i,day:['월','화','수','목','금','토','일'][(i*Math.floor(7/state.frequency))%7],title:set[i%set.length][0],summary:set[i%set.length][1],duration:state.duration,level:state.level}));state.completed=[];selected=0;save();render();toast('맞춤 주간 계획을 만들었어요');}
+async function makePlan(){await templatesReady;state.goal=$('#goal').value;state.level=$('#level').value;state.frequency=+$('#frequency').value;state.duration=+$('#duration').value;state.caution=$('#caution').value.trim();const set=templates[state.goal];state.plan=Array.from({length:state.frequency},(_,i)=>({id:Date.now()+i,day:['월','화','수','목','금','토','일'][(i*Math.floor(7/state.frequency))%7],title:set[i%set.length][0],summary:set[i%set.length][1],duration:state.duration,level:state.level}));state.completed=[];selected=0;save();render();toast('맞춤 주간 계획을 만들었어요');}
 function render(){const done=state.completed.length,total=state.plan.length,pct=total?Math.round(done/total*100):0;$('#hello').textContent=`안녕하세요, ${state.name}님!`;$('#heroDone').textContent=done;$('#heroStreak').textContent=state.streak+'일';$('#heroScore').textContent=done*120;$('#planMeta').textContent=total?`${state.goal} · 주 ${total}회`:'계획을 만들어 주세요';$('#planGoal').textContent=state.goal;$('#progressText').textContent=pct+'%';$('#progressBar').style.width=pct+'%';$('#totalDone').textContent=done+'회';$('#totalMinutes').textContent=(done*state.duration)+'분';renderWeek();renderPlan();renderBadges();renderChecklist();renderSocial();}
 function renderWeek(){const box=$('#weekDays'),out=$('#todayWorkout');if(!state.plan.length){box.innerHTML='';out.innerHTML='<div class="card empty">위에서 나만의 운동 계획을 먼저 만들어 보세요.</div>';return}box.innerHTML=state.plan.map((w,i)=>`<button class="day ${i===selected?'active':''}" data-day="${i}"><b>${w.day}요일</b><span>${i+1}</span></button>`).join('');const w=state.plan[selected],done=state.completed.includes(w.id);out.innerHTML=`<div class="card workout"><div class="workout-icon">${done?'✅':'🏃'}</div><div class="workout-info"><h3>${w.title}</h3><p>${w.duration}분 · ${w.level} · ${w.summary}</p></div><button class="pill" data-open="${selected}">${done?'완료':'보기'}</button></div>`;$$('[data-day]').forEach(b=>b.onclick=()=>{selected=+b.dataset.day;renderWeek()});$$('[data-open]').forEach(b=>b.onclick=()=>openWorkout(+b.dataset.open));}
 function renderPlan(){const box=$('#planList');box.innerHTML=state.plan.length?state.plan.map((w,i)=>`<div class="card workout"><div class="workout-icon">${state.completed.includes(w.id)?'✅':['🏋️','🏃','🧘'][i%3]}</div><div class="workout-info"><span class="eyebrow">${w.day}요일 · ${w.duration}분</span><h3>${w.title}</h3><p>${w.summary}</p></div><button class="pill" data-plan-open="${i}">상세</button></div>`).join(''):'<div class="card empty">홈에서 주간 계획을 만들어 주세요.</div>';$$('[data-plan-open]').forEach(b=>b.onclick=()=>openWorkout(+b.dataset.planOpen));}
