@@ -40,4 +40,19 @@ function enterApp(){state.loginSeen=true;save();$('#loginScreen').classList.add(
 $('#loginNext').onclick=enterApp;$('#loginSkip').onclick=enterApp;if(state.loginSeen)$('#loginScreen').classList.add('hidden');
 $('#toggleBadges').onclick=()=>{const d=$('#badgeDetail');d.classList.toggle('open');$('#toggleBadges').textContent=d.classList.contains('open')?'배지 목록 접기':'전체 배지 목록 보기'};
 $('#planForm').onsubmit=e=>{e.preventDefault();makePlan()};$('#closeModal').onclick=()=>$('#modal').classList.remove('open');$('#modal').onclick=e=>{if(e.target.id==='modal')$('#modal').classList.remove('open')};$('#completeWorkout').onclick=()=>{const w=state.plan[selected],i=state.completed.indexOf(w.id);if(i<0){state.completed.push(w.id);state.streak=Math.max(1,state.streak+1);toast('멋져요! 운동을 완료했어요 🎉')}else{state.completed.splice(i,1);state.streak=Math.max(0,state.streak-1);toast('완료 기록을 취소했어요')}save();$('#modal').classList.remove('open');render()};$$('.tab').forEach(t=>t.onclick=()=>go(t.dataset.page));$$('[data-go]').forEach(t=>t.onclick=()=>go(t.dataset.go));$$('[data-switch]').forEach(s=>s.onclick=()=>s.classList.toggle('on'));$('#nickname').value=state.name;$('#saveProfile').onclick=()=>{state.name=$('#nickname').value.trim()||'운동새싹';save();render();toast('프로필을 저장했어요')};$('#showLogin').onclick=()=>{$('#loginPhone').value='';$('#loginScreen').classList.remove('hidden')};$('#resetData').onclick=()=>{if(confirm('모든 데모 기록을 초기화할까요?')){state={...defaultState,checks:{...defaultState.checks},plan:[],completed:[]};save();location.reload()}};
-$('#goal').value=state.goal;$('#level').value=state.level;$('#frequency').value=state.frequency;$('#duration').value=state.duration;$('#caution').value=state.caution;render();
+$('#goal').value=state.goal;$('#level').value=state.level;$('#frequency').value=state.frequency;$('#duration').value=state.duration;$('#caution').value=state.caution;
+async function repairSavedPlan(){
+ await templatesReady;
+ if(!state.plan.length)return;
+ const set=templates[state.goal];
+ if(!Array.isArray(set)||!set.length)return;
+ let changed=false;
+ state.plan=state.plan.map((w,i)=>{
+  if(w.title&&w.summary)return w;
+  changed=true;
+  const item=set[i%set.length];
+  return {...w,title:item[0],summary:item[1],duration:w.duration||state.duration,level:w.level||state.level};
+ });
+ if(changed)save();
+}
+repairSavedPlan().then(render);
