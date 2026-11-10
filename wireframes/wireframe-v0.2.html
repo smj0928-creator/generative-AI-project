@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="AI트레이너 v0.2 프로토타입 기반 모바일 와이어프레임">
+  <title>AI트레이너 와이어프레임 v0.2</title>
+  <style>
+    :root { color-scheme: light; --ink:#252525; --muted:#717171; --line:#bdbdbd; --soft:#ededed; --paper:#f8f8f8; --white:#fff; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:#dedede; color:var(--ink); font:15px/1.45 Arial,"Malgun Gothic",sans-serif; }
+    button,input,select { font:inherit; color:inherit; }
+    button { cursor:pointer; }
+    .page { width:min(100%,1120px); margin:auto; padding:28px 20px 56px; }
+    .page-head { display:flex; align-items:end; justify-content:space-between; gap:16px; margin:0 auto 18px; max-width:900px; }
+    .page-head h1 { margin:0; font-size:22px; }
+    .page-head p { margin:4px 0 0; color:var(--muted); font-size:13px; }
+    .version { border:1px solid #777; border-radius:99px; padding:5px 10px; font-size:12px; white-space:nowrap; }
+    .board { display:grid; grid-template-columns:repeat(3,minmax(220px,1fr)); gap:18px; justify-content:center; }
+    .phone { width:100%; max-width:320px; min-height:660px; margin:auto; overflow:hidden; background:var(--paper); border:2px solid #666; border-radius:30px; box-shadow:0 8px 24px #0002; display:flex; flex-direction:column; }
+    .phone-label { padding:10px 16px 7px; background:#e5e5e5; border-bottom:1px solid var(--line); font-size:12px; font-weight:700; }
+    .screen { flex:1; overflow:auto; padding:15px 14px 10px; }
+    .topbar { display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; }
+    .brand { font-size:17px; font-weight:800; }
+    .avatar { width:32px; height:32px; border:1px solid #888; border-radius:50%; display:grid; place-items:center; background:#eee; font-size:12px; }
+    h2 { margin:0 0 5px; font-size:20px; }
+    h3 { margin:0 0 9px; font-size:15px; }
+    p { margin:4px 0 10px; }
+    .muted { color:var(--muted); font-size:12px; }
+    .card { padding:12px; margin:10px 0; border:1px solid var(--line); border-radius:14px; background:var(--white); }
+    .row { display:flex; align-items:center; justify-content:space-between; gap:8px; }
+    .stats { display:grid; grid-template-columns:repeat(3,1fr); gap:6px; margin:10px 0; }
+    .stat { padding:8px 4px; text-align:center; border:1px solid var(--line); border-radius:10px; background:#f1f1f1; }
+    .stat b { display:block; font-size:15px; }
+    .stat span { font-size:10px; color:var(--muted); }
+    .field { margin:9px 0; }
+    .field label { display:block; margin-bottom:4px; font-size:12px; font-weight:700; }
+    select,input[type=text] { width:100%; min-height:38px; padding:7px 9px; border:1px solid #999; border-radius:8px; background:#fff; }
+    .chips { display:flex; flex-wrap:wrap; gap:6px; }
+    .chip { padding:5px 8px; border:1px solid #999; border-radius:99px; background:#f4f4f4; font-size:11px; }
+    .btn { width:100%; min-height:40px; margin-top:7px; padding:9px 12px; border:1px solid #666; border-radius:10px; background:#dedede; font-weight:700; }
+    .btn.secondary { background:white; }
+    .btn.small { width:auto; min-height:32px; margin:0; padding:5px 9px; font-size:11px; }
+    .schedule { display:grid; gap:7px; }
+    .workout { display:grid; grid-template-columns:38px 1fr auto; align-items:center; gap:8px; padding:9px; border:1px solid var(--line); border-radius:10px; background:#fff; }
+    .day { width:34px; height:34px; display:grid; place-items:center; border:1px solid #aaa; border-radius:9px; background:#eee; font-size:11px; font-weight:700; }
+    .workout strong { display:block; font-size:12px; }
+    .workout small { color:var(--muted); font-size:10px; }
+    .progress { height:9px; margin:8px 0; border:1px solid #aaa; border-radius:99px; background:#eee; overflow:hidden; }
+    .progress i { display:block; width:58%; height:100%; background:#999; }
+    .checklist label { display:flex; gap:8px; align-items:center; padding:6px 0; font-size:12px; }
+    .badge-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:7px; }
+    .badge { min-height:70px; display:grid; align-content:center; justify-items:center; padding:6px; border:1px solid #aaa; border-radius:10px; background:#f1f1f1; text-align:center; font-size:10px; }
+    .badge b { font-size:19px; filter:grayscale(1); }
+    .rank { display:grid; grid-template-columns:28px 1fr auto; gap:7px; align-items:center; padding:7px 0; border-bottom:1px solid #ddd; font-size:11px; }
+    .rank.me { font-weight:700; background:#eee; }
+    .nav { display:grid; grid-template-columns:repeat(5,1fr); gap:2px; padding:8px 5px 10px; border-top:1px solid var(--line); background:#eee; }
+    .nav button { padding:4px 0; border:0; background:transparent; color:#555; font-size:10px; }
+    .nav button b { display:block; margin-bottom:2px; font-size:15px; }
+    .nav button.active { color:#111; font-weight:800; }
+    .flow { max-width:900px; margin:22px auto 0; padding:14px 16px; border:1px solid #aaa; border-radius:14px; background:#f5f5f5; }
+    .flow h2 { font-size:15px; }
+    .flowline { display:flex; flex-wrap:wrap; align-items:center; gap:7px; font-size:12px; }
+    .flowline span { padding:5px 8px; border:1px solid #aaa; border-radius:8px; background:#fff; }
+    .flowline i { color:#777; font-style:normal; }
+    @media(max-width:760px) { .page { padding:18px 12px 36px; } .board { grid-template-columns:1fr; } .phone { max-width:390px; min-height:700px; } .page-head { max-width:390px; } }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header class="page-head">
+      <div><h1>AI트레이너 · 와이어프레임</h1><p>기존 v0.1 프로토타입 기능을 화면 흐름으로 정리한 회색조 초안</p></div>
+      <span class="version">WIREFRAME v0.2 · DRAFT</span>
+    </header>
+
+    <section class="board" aria-label="프로토타입 주요 화면">
+      <article class="phone">
+        <div class="phone-label">01 · 홈 / 맞춤 운동 계획</div>
+        <div class="screen">
+          <div class="topbar"><span class="brand">AI트레이너</span><span class="avatar">나</span></div>
+          <h2>오늘도 가볍게 시작해요</h2><p class="muted">이번 주 운동을 내 목표에 맞게 구성해요.</p>
+          <div class="stats"><div class="stat"><b>8회</b><span>완료 운동</span></div><div class="stat"><b>3일</b><span>연속 기록</span></div><div class="stat"><b>420</b><span>이번 주 XP</span></div></div>
+          <div class="card">
+            <h3>맞춤 운동 조건</h3>
+            <div class="field"><label for="goal">운동 목표</label><select id="goal"><option>근력 강화</option><option>체력 향상</option><option>체중 감량</option><option>유연성 향상</option></select></div>
+            <div class="field"><label for="level">운동 수준</label><select id="level"><option>초보</option><option>중급</option><option>고급</option></select></div>
+            <div class="row"><div class="field" style="width:50%"><label for="frequency">주당 횟수</label><select id="frequency"><option>3회</option><option>2회</option><option>4회</option><option>5회</option></select></div><div class="field" style="width:50%"><label for="duration">운동 시간</label><select id="duration"><option>30분</option><option>20분</option><option>45분</option><option>60분</option></select></div></div>
+            <div class="field"><label>주의사항 / 피하고 싶은 부위</label><input type="text" placeholder="예: 무릎에 부담이 적은 운동"></div>
+            <button class="btn" onclick="alert('입력 조건에 맞춰 주간 계획을 구성하는 흐름')">이번 주 계획 생성</button>
+          </div>
+          <div class="card"><div class="row"><h3>오늘의 운동</h3><button class="btn small secondary" onclick="show('detail')">상세 보기</button></div><p><b>전신 근력 루틴</b><br><span class="muted">30분 · 초보 · 5개 동작</span></p></div>
+        </div>
+        <nav class="nav"><button class="active" onclick="show('home')"><b>⌂</b>홈</button><button onclick="show('plan')"><b>▤</b>플랜</button><button onclick="show('growth')"><b>▥</b>성장</button><button onclick="show('together')"><b>♧</b>함께</button><button onclick="show('settings')"><b>⚙</b>설정</button></nav>
+      </article>
+
+      <article class="phone" id="plan">
+        <div class="phone-label">02 · 플랜 / 주간 운동 목록</div>
+        <div class="screen">
+          <div class="topbar"><span class="brand">이번 주 플랜</span><span class="avatar">주간</span></div>
+          <p class="muted">근력 강화 · 초보 · 주 3회 · 회당 30분</p>
+          <div class="progress"><i></i></div><p class="muted">이번 주 2 / 3회 완료</p>
+          <div class="schedule">
+            <div class="workout"><span class="day">월</span><div><strong>전신 근력 루틴</strong><small>30분 · 완료</small></div><button class="btn small secondary" onclick="show('detail')">보기</button></div>
+            <div class="workout"><span class="day">수</span><div><strong>저강도 유산소</strong><small>25분 · 오늘</small></div><button class="btn small secondary" onclick="show('detail')">보기</button></div>
+            <div class="workout"><span class="day">금</span><div><strong>코어 안정화</strong><small>20분 · 예정</small></div><button class="btn small secondary" onclick="show('detail')">보기</button></div>
+          </div>
+          <div class="card"><h3>계획 안내</h3><p class="muted">운동 일정은 입력한 목표와 수준을 바탕으로 구성됩니다. 몸 상태에 따라 강도와 횟수를 조절하세요.</p><button class="btn secondary" onclick="show('home')">조건 수정하기</button></div>
+        </div>
+        <nav class="nav"><button onclick="show('home')"><b>⌂</b>홈</button><button class="active" onclick="show('plan')"><b>▤</b>플랜</button><button onclick="show('growth')"><b>▥</b>성장</button><button onclick="show('together')"><b>♧</b>함께</button><button onclick="show('settings')"><b>⚙</b>설정</button></nav>
+      </article>
+
+      <article class="phone" id="detail">
+        <div class="phone-label">03 · 운동 상세 / 안전 안내 / 준비</div>
+        <div class="screen">
+          <div class="topbar"><button class="btn small secondary" onclick="show('plan')">← 플랜</button><span class="brand">운동 상세</span><span class="avatar">30′</span></div>
+          <h2>전신 근력 루틴</h2><p class="muted">초보 · 예상 30분 · 전신</p>
+          <div class="card"><h3>운동 구성</h3><div class="workout"><span class="day">01</span><div><strong>의자 스쿼트</strong><small>10회 × 3세트</small></div><span>＋</span></div><div class="workout"><span class="day">02</span><div><strong>벽 푸시업</strong><small>8회 × 3세트</small></div><span>＋</span></div><div class="workout"><span class="day">03</span><div><strong>글루트 브리지</strong><small>12회 × 3세트</small></div><span>＋</span></div><div class="workout"><span class="day">04</span><div><strong>버드독</strong><small>좌우 8회 × 2세트</small></div><span>＋</span></div></div>
+          <div class="card"><h3>운동 전 준비</h3><div class="checklist"><label><input type="checkbox"> 물과 수건 준비</label><label><input type="checkbox"> 주변 공간 확인</label><label><input type="checkbox"> 가벼운 준비 운동</label></div></div>
+          <div class="card"><h3>안전 안내</h3><p class="muted">통증이나 어지러움이 있으면 즉시 중단하세요. 본 안내는 일반적인 정보이며 개인별 의료 조언을 대신하지 않습니다.</p></div>
+          <button class="btn" onclick="alert('운동 완료 기록 → 성장 지표와 배지 갱신 흐름')">운동 완료하기 · XP 받기</button>
+        </div>
+        <nav class="nav"><button onclick="show('home')"><b>⌂</b>홈</button><button class="active" onclick="show('plan')"><b>▤</b>플랜</button><button onclick="show('growth')"><b>▥</b>성장</button><button onclick="show('together')"><b>♧</b>함께</button><button onclick="show('settings')"><b>⚙</b>설정</button></nav>
+      </article>
+
+      <article class="phone" id="growth">
+        <div class="phone-label">04 · 성장 / 기록 / 배지 / 체크리스트</div>
+        <div class="screen">
+          <div class="topbar"><span class="brand">나의 성장</span><span class="avatar">Lv.4</span></div>
+          <h2>이번 주도 잘하고 있어요</h2><p class="muted">주간 목표를 향해 조금씩 쌓아가요.</p>
+          <div class="card"><div class="row"><h3>주간 달성률</h3><b>2 / 3회</b></div><div class="progress"><i style="width:66%"></i></div><div class="stats"><div class="stat"><b>8</b><span>총 운동</span></div><div class="stat"><b>240분</b><span>누적 시간</span></div><div class="stat"><b>420 XP</b><span>이번 주</span></div></div></div>
+          <div class="card"><div class="row"><h3>배지 도감</h3><span class="muted">3 / 9 획득</span></div><div class="badge-grid"><div class="badge"><b>▧</b>첫걸음</div><div class="badge"><b>▧</b>꾸준함</div><div class="badge"><b>▧</b>3회 완료</div><div class="badge"><b>□</b>7일 연속</div><div class="badge"><b>□</b>계획 달성</div><div class="badge"><b>□</b>챌린저</div><div class="badge"><b>□</b>전신 루틴</div><div class="badge"><b>□</b>새 목표</div><div class="badge"><b>□</b>성장 중</div></div></div>
+          <div class="card"><h3>운동 준비 체크</h3><div class="checklist"><label><input type="checkbox"> 물</label><label><input type="checkbox"> 수건</label><label><input type="checkbox"> 운동 공간</label></div></div>
+        </div>
+        <nav class="nav"><button onclick="show('home')"><b>⌂</b>홈</button><button onclick="show('plan')"><b>▤</b>플랜</button><button class="active" onclick="show('growth')"><b>▥</b>성장</button><button onclick="show('together')"><b>♧</b>함께</button><button onclick="show('settings')"><b>⚙</b>설정</button></nav>
+      </article>
+
+      <article class="phone" id="together">
+        <div class="phone-label">05 · 함께 / 리그 / 공개 루틴 / 매칭</div>
+        <div class="screen">
+          <div class="topbar"><span class="brand">함께 운동해요</span><span class="avatar">♧</span></div>
+          <div class="card"><div class="row"><h3>브론즈 리그</h3><span class="chip">이번 주</span></div><p class="muted">실버 승급선 · 10위 이내 + 700점 이상</p><div class="rank"><b>1</b><span>민지</span><span>980 XP</span></div><div class="rank"><b>2</b><span>도윤</span><span>910 XP</span></div><div class="rank"><b>3</b><span>하린</span><span>840 XP</span></div><div class="rank"><b>9</b><span>준호</span><span>720 XP</span></div><div class="rank me"><b>12</b><span>나 · 현재 순위</span><span>420 XP</span></div><p class="muted">총 32명 중 12위</p><button class="btn secondary">전체 순위 보기</button></div>
+          <div class="card"><h3>인기 트레이너 루틴</h3><div class="workout"><span class="day">01</span><div><strong>초보 전신 20분</strong><small>저충격 · 5개 동작</small></div><button class="btn small secondary">보기</button></div><div class="workout"><span class="day">02</span><div><strong>아침 스트레칭</strong><small>유연성 · 10분</small></div><button class="btn small secondary">보기</button></div></div>
+          <div class="card"><h3>나와 비슷한 운동 친구</h3><p class="muted">목표·수준이 비슷한 사용자 예시</p><div class="row"><span>운동 초보 · 주 3회</span><button class="btn small secondary">응원하기</button></div></div>
+        </div>
+        <nav class="nav"><button onclick="show('home')"><b>⌂</b>홈</button><button onclick="show('plan')"><b>▤</b>플랜</button><button onclick="show('growth')"><b>▥</b>성장</button><button class="active" onclick="show('together')"><b>♧</b>함께</button><button onclick="show('settings')"><b>⚙</b>설정</button></nav>
+      </article>
+
+      <article class="phone" id="settings">
+        <div class="phone-label">06 · 설정 / 프로필 / 데모 안내</div>
+        <div class="screen">
+          <div class="topbar"><span class="brand">설정</span><span class="avatar">⚙</span></div>
+          <div class="card"><h3>프로필</h3><div class="field"><label for="nickname">닉네임</label><input id="nickname" type="text" value="운동하는 나"></div><button class="btn secondary">닉네임 저장</button></div>
+          <div class="card"><h3>알림과 안내</h3><div class="row"><span>운동 알림</span><input type="checkbox" aria-label="운동 알림"></div><div class="row"><span>안전 안내 표시</span><input type="checkbox" checked aria-label="안전 안내 표시"></div><p class="muted">토글은 시연용 UI입니다.</p></div>
+          <div class="card"><h3>데모 데이터</h3><p class="muted">이 프로토타입은 로그인이나 서버 없이 현재 브라우저에 기록을 저장합니다.</p><button class="btn secondary">시작 화면 다시 보기</button><button class="btn secondary">데모 데이터 초기화</button></div>
+          <div class="card"><p class="muted">실제 생성형 AI, 계정, 서버, 실시간 사용자 데이터는 연결되어 있지 않습니다.</p></div>
+        </div>
+        <nav class="nav"><button onclick="show('home')"><b>⌂</b>홈</button><button onclick="show('plan')"><b>▤</b>플랜</button><button onclick="show('growth')"><b>▥</b>성장</button><button onclick="show('together')"><b>♧</b>함께</button><button class="active" onclick="show('settings')"><b>⚙</b>설정</button></nav>
+      </article>
+    </section>
+
+    <section class="flow"><h2>대표 사용자 흐름</h2><div class="flowline"><span>시작 / 둘러보기</span><i>→</i><span>홈에서 조건 입력</span><i>→</i><span>주간 계획 생성</span><i>→</i><span>운동 상세·준비·안전 확인</span><i>→</i><span>완료 기록</span><i>→</i><span>성장·배지 확인</span></div><p class="muted">함께 화면의 리그·공개 루틴·매칭 데모와 설정 화면은 하단 탭에서 이어집니다.</p></section>
+  </main>
+  <script>
+    function show(id) {
+      const target = document.getElementById(id);
+      if (target) target.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  </script>
+</body>
+</html>
