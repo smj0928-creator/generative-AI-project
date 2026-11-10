@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="AI트레이너 v0.2 모바일 와이어프레임: 운동 조건, 안전 필터, 계획, 완료 기록">
+  <title>AI트레이너 와이어프레임 v0.2</title>
+  <style>
+    :root { color-scheme:light; --ink:#252525; --muted:#666; --line:#aaa; --paper:#f8f8f8; --white:#fff; --shade:#e8e8e8; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:#dedede; color:var(--ink); font:15px/1.48 Arial,"Malgun Gothic",sans-serif; }
+    button,input,select { font:inherit; color:inherit; }
+    button { cursor:pointer; }
+    button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible { outline:3px solid #333; outline-offset:2px; }
+    .page { width:min(100%,900px); margin:auto; padding:24px 16px 48px; }
+    .page-head { max-width:390px; margin:0 auto 14px; display:flex; align-items:end; justify-content:space-between; gap:10px; }
+    .page-head h1 { margin:0; font-size:20px; }
+    .page-head p { margin:4px 0 0; color:var(--muted); font-size:12px; }
+    .version { border:1px solid #777; border-radius:99px; padding:5px 9px; font-size:11px; white-space:nowrap; }
+    .notice { display:none; max-width:390px; margin:0 auto 12px; padding:10px 12px; border:1px solid #777; border-radius:10px; background:#fff; font-size:13px; }
+    .notice.visible { display:block; }
+    .phone { display:none; width:100%; max-width:390px; min-height:710px; margin:auto; overflow:hidden; background:var(--paper); border:2px solid #666; border-radius:28px; box-shadow:0 8px 24px #0002; flex-direction:column; }
+    .phone.active { display:flex; }
+    .phone-label { padding:9px 15px; background:var(--shade); border-bottom:1px solid var(--line); font-size:11px; font-weight:700; }
+    .screen { flex:1; padding:15px 14px 12px; }
+    .topbar { display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; }
+    .brand { font-size:17px; font-weight:800; }
+    .top-meta { font-size:11px; color:var(--muted); }
+    h2 { margin:0 0 5px; font-size:20px; line-height:1.25; }
+    h3 { margin:0 0 8px; font-size:15px; }
+    p { margin:5px 0 10px; }
+    .muted { color:var(--muted); font-size:12px; }
+    .card { margin:11px 0; padding:12px; border:1px solid var(--line); border-radius:13px; background:var(--white); }
+    .card.soft { background:#f0f0f0; }
+    .row { display:flex; align-items:center; justify-content:space-between; gap:8px; }
+    .row.top { align-items:flex-start; }
+    .field { margin:10px 0; }
+    .field > label,.field > legend { display:block; margin-bottom:5px; font-size:12px; font-weight:700; }
+    fieldset { border:0; padding:0; }
+    select,input[type=text] { width:100%; min-height:40px; padding:8px 9px; border:1px solid #888; border-radius:8px; background:#fff; }
+    .twocol { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+    .choices { display:flex; flex-wrap:wrap; gap:7px; }
+    .choice { display:inline-flex; align-items:center; gap:4px; min-height:36px; padding:6px 9px; border:1px solid #999; border-radius:9px; background:#f5f5f5; font-size:12px; }
+    .choice:has(input:checked) { border-color:#333; background:#ddd; font-weight:700; }
+    .choice input { margin:0; accent-color:#333; }
+    .btn { display:block; width:100%; min-height:42px; margin-top:9px; padding:9px 12px; border:1px solid #555; border-radius:10px; background:#d9d9d9; font-weight:700; }
+    .btn.secondary { background:#fff; }
+    .btn.small { width:auto; min-height:34px; margin:0; padding:6px 9px; font-size:11px; }
+    .btn:disabled { opacity:.55; cursor:not-allowed; }
+    .tag { display:inline-block; padding:4px 7px; border:1px solid #888; border-radius:99px; background:#eee; font-size:11px; }
+    .empty { padding:17px 12px; border:1px dashed #999; border-radius:11px; background:#f7f7f7; text-align:center; }
+    .empty strong { display:block; margin-bottom:4px; }
+    .steps { margin:8px 0 0; padding-left:19px; font-size:12px; }
+    .steps li { margin:5px 0; }
+    .schedule { display:grid; gap:7px; }
+    .workout { display:grid; grid-template-columns:34px 1fr auto; align-items:center; gap:8px; padding:9px; border:1px solid var(--line); border-radius:10px; background:#fff; }
+    .day { width:32px; height:32px; display:grid; place-items:center; border:1px solid #aaa; border-radius:8px; background:#eee; font-size:11px; font-weight:700; }
+    .workout strong { display:block; font-size:12px; }
+    .workout small { display:block; color:var(--muted); font-size:10px; }
+    .exercise { padding:8px 0; border-bottom:1px solid #ddd; font-size:12px; }
+    .exercise:last-child { border:0; }
+    .safety { border-left:4px solid #555; background:#efefef; }
+    .safety p { font-size:12px; }
+    .stats { display:grid; grid-template-columns:repeat(2,1fr); gap:8px; }
+    .stat { padding:10px; border:1px solid var(--line); border-radius:10px; background:#f1f1f1; text-align:center; }
+    .stat b { display:block; font-size:20px; }
+    .stat span { color:var(--muted); font-size:11px; }
+    .progress { height:9px; margin:9px 0; border:1px solid #999; border-radius:99px; background:#eee; overflow:hidden; }
+    .progress i { display:block; width:0; height:100%; background:#777; }
+    .nav { display:grid; grid-template-columns:repeat(4,1fr); gap:2px; padding:7px 5px 9px; border-top:1px solid var(--line); background:#eee; }
+    .nav button { min-height:43px; border:0; background:transparent; color:#555; font-size:11px; }
+    .nav button span:first-child { display:block; font-size:17px; line-height:1.2; }
+    .nav button.active { color:#111; font-weight:800; text-decoration:underline; text-underline-offset:3px; }
+    .spec { max-width:700px; margin:18px auto 0; padding:13px 16px; border:1px solid #999; border-radius:12px; background:#f6f6f6; font-size:12px; }
+    .spec summary { cursor:pointer; font-weight:700; }
+    .spec h3 { margin:15px 0 4px; font-size:13px; }
+    .spec pre { margin:5px 0; padding:9px; overflow:auto; border:1px solid #bbb; border-radius:8px; background:#fff; font:11px/1.45 Consolas,monospace; }
+    dialog { width:min(340px,calc(100% - 32px)); border:2px solid #555; border-radius:16px; box-shadow:0 14px 40px #0005; padding:19px; }
+    dialog::backdrop { background:#0008; }
+    dialog h2 { font-size:18px; }
+    @media(max-width:480px) { .page { padding:15px 10px 32px; } .page-head h1 { font-size:18px; } }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header class="page-head">
+      <div><h1>AI트레이너 · 와이어프레임</h1><p>피드백을 반영한 핵심 운동 흐름</p></div>
+      <span class="version">WIREFRAME v0.2</span>
+    </header>
+    <div id="notice" class="notice" role="status" aria-live="polite"></div>
+
+    <article class="phone active" id="home" aria-label="홈 화면">
+      <div class="phone-label">01 · 첫 사용 / 운동 조건</div>
+      <div class="screen">
+        <div class="topbar"><span class="brand">AI트레이너</span><span class="top-meta" id="home-name">운동하는 나</span></div>
+        <h2 tabindex="-1">나에게 맞는 첫 계획</h2>
+        <p class="muted">목표와 몸 상태를 알려 주면 운동 계획을 보여 드려요.</p>
+        <div id="home-start" class="empty"><strong>계획 만들기부터 시작해요</strong><span class="muted">운동 기록 0회 · XP 0점. 첫 계획을 만들어 보세요.</span></div>
+        <div id="home-progress" class="card" hidden><div class="row"><strong>이번 주 진행</strong><span id="home-count">0회 완료</span></div><div class="progress"><i id="home-progress-bar"></i></div><p class="muted">완료 기록은 이 브라우저에 저장돼요.</p></div>
+        <form id="conditions" class="card">
+          <h3>운동 조건</h3>
+          <div class="field"><label for="goal">운동 목표</label><select id="goal"><option>근력 강화</option><option>체력 향상</option><option>체중 감량</option><option>유연성 향상</option></select></div>
+          <div class="field"><label for="level">운동 수준</label><select id="level"><option>입문</option><option>중급</option><option>상급</option></select></div>
+          <div class="twocol"><div class="field"><label for="frequency">주당 횟수</label><select id="frequency"><option value="2">2회</option><option value="3" selected>3회</option><option value="4">4회</option><option value="5">5회</option></select></div><div class="field"><label for="duration">회당 시간</label><select id="duration"><option value="20" selected>20분</option><option value="30">30분</option><option value="45">45분</option></select></div></div>
+          <fieldset class="field"><legend>피하고 싶은 부위</legend><div class="choices"><label class="choice"><input type="checkbox" name="avoid" value="무릎">무릎</label><label class="choice"><input type="checkbox" name="avoid" value="허리">허리</label><label class="choice"><input type="checkbox" name="avoid" value="어깨">어깨</label></div><p class="muted">선택한 부위에 부담을 줄 수 있는 동작은 시연 계획에서 제외해요.</p></fieldset>
+          <button class="btn" type="submit">이번 주 계획 만들기</button>
+        </form>
+      </div>
+      <nav class="nav" aria-label="하단 메뉴"></nav>
+    </article>
+
+    <article class="phone" id="plan" aria-label="운동 계획 화면">
+      <div class="phone-label">02 · 계획 결과 / 반영 근거</div>
+      <div class="screen">
+        <div class="topbar"><span class="brand">AI트레이너</span><span class="top-meta">이번 주 계획</span></div>
+        <h2 tabindex="-1">이번 주 계획</h2>
+        <div id="plan-empty" class="empty"><strong>아직 계획이 없어요</strong><span class="muted">홈에서 운동 조건을 입력해 주세요.</span><button class="btn secondary" onclick="show('home')">조건 입력하기</button></div>
+        <div id="plan-result" hidden>
+          <div class="card"><div class="row"><h3>계획에 반영한 조건</h3><span class="tag">규칙 기반 시연</span></div><p id="plan-summary" class="muted"></p><p id="plan-restrictions" class="muted"></p><p id="plan-exclusions" class="muted"></p></div>
+          <div id="plan-review" class="card safety" hidden><h3>안전 검토가 필요해요</h3><p>피하고 싶은 부위가 여러 곳이에요. 자동 추천을 멈췄어요. 통증·질환·재활 중이라면 전문가와 운동 범위를 상담해 주세요.</p><button class="btn secondary" onclick="show('home')">조건 다시 보기</button></div>
+          <div id="plan-ready" hidden><h3>요일별 운동</h3><div id="schedule" class="schedule"></div><div class="card safety"><h3>시작 전 확인</h3><p>입문자는 가벼운 강도로 시작하세요. 통증이나 어지러움이 생기면 즉시 중단하고, 질환이나 재활 중이면 전문가와 상담하세요.</p></div><button class="btn secondary" onclick="show('home')">조건 수정하기</button></div>
+        </div>
+      </div>
+      <nav class="nav" aria-label="하단 메뉴"></nav>
+    </article>
+
+    <article class="phone" id="detail" aria-label="운동 상세 화면">
+      <div class="phone-label">03 · 운동 상세 / 항상 보이는 안전 안내</div>
+      <div class="screen">
+        <div class="topbar"><span class="brand">AI트레이너</span><button class="btn small secondary" onclick="show('plan')">← 계획</button></div>
+        <h2 tabindex="-1" id="detail-title">오늘의 운동</h2>
+        <p id="detail-summary" class="muted"></p>
+        <div class="card"><h3>운동 구성</h3><div id="exercise-list"></div></div>
+        <div class="card"><h3>운동 전 준비</h3><p class="muted">물·수건 준비 → 주변 공간 확인 → 가벼운 준비 운동</p></div>
+        <div class="card safety"><h3>안전 안내 · 항상 표시</h3><p>통증이나 어지러움이 생기면 즉시 중단하세요. 질환이 있거나 재활 중이면 운동 전 전문가와 상담하세요. 입문자는 무리하지 않고 가벼운 강도와 1세트부터 시작하세요.</p><p class="muted">이 계획은 의료적 진단이나 처방을 대신하지 않습니다.</p></div>
+        <button class="btn" id="complete-button" onclick="completeWorkout()">운동 완료 기록하기</button>
+      </div>
+      <nav class="nav" aria-label="하단 메뉴"></nav>
+    </article>
+
+    <article class="phone" id="record" aria-label="운동 기록 화면">
+      <div class="phone-label">04 · 첫 기록 / 진행 상태</div>
+      <div class="screen">
+        <div class="topbar"><span class="brand">AI트레이너</span><span class="top-meta">내 기록</span></div>
+        <h2 tabindex="-1">운동 기록</h2>
+        <div id="record-empty" class="empty"><strong>아직 완료한 운동이 없어요</strong><span class="muted">첫 운동을 완료하면 진행 상황이 여기에 나타나요.</span><button class="btn secondary" onclick="show('home')">계획 만들기</button></div>
+        <div id="record-result" hidden><p class="muted">첫 운동부터 차근차근 쌓아가요.</p><div class="stats"><div class="stat"><b id="record-count">0</b><span>완료 운동</span></div><div class="stat"><b id="record-xp">0</b><span>획득 XP</span></div></div><div class="card"><div class="row"><h3>이번 주 목표</h3><b id="record-ratio">0 / 3회</b></div><div class="progress"><i id="record-progress-bar"></i></div><p class="muted" id="record-message"></p></div></div>
+      </div>
+      <nav class="nav" aria-label="하단 메뉴"></nav>
+    </article>
+
+    <article class="phone" id="profile" aria-label="내 정보 화면">
+      <div class="phone-label">05 · 닉네임 / 시연 데이터</div>
+      <div class="screen">
+        <div class="topbar"><span class="brand">AI트레이너</span><span class="top-meta">내 정보</span></div>
+        <h2 tabindex="-1">내 정보</h2>
+        <form id="nickname-form" class="card"><h3>닉네임</h3><div class="field"><label for="nickname">화면에 표시할 이름</label><input id="nickname" type="text" maxlength="20" autocomplete="nickname" value="운동하는 나"></div><button class="btn secondary" type="submit">닉네임 저장</button></form>
+        <div class="card"><h3>시연 안내</h3><p class="muted">이 와이어프레임의 계획은 규칙 기반으로 동작하고 기록은 현재 브라우저에 저장돼요.</p><button class="btn secondary" onclick="openIntro()">처음 안내 다시 보기</button><button class="btn secondary" onclick="resetDemo()">시연 데이터 초기화</button></div>
+        <div class="card soft"><h3>다음 단계 후보</h3><p class="muted">리그·배지·공개 루틴·친구 매칭은 핵심 운동 흐름을 다듬은 뒤 검토해요.</p></div>
+      </div>
+      <nav class="nav" aria-label="하단 메뉴"></nav>
+    </article>
+
+    <details class="spec"><summary>발표용 · AI 연결 설계와 v0.2 시연 범위 보기</summary>
+      <h3>연결 흐름</h3><p>모바일 화면 → 서버 또는 프록시 → LLM → 금기 부위 필터·강도 상한 검사 → 주간 계획. AI 응답이 실패하거나 안전 검사를 통과하지 못하면 검증된 규칙 계획으로 전환합니다. 정적 페이지에는 API 키를 넣지 않습니다.</p>
+      <h3>입력과 프롬프트 예시</h3><pre>입력: {goal, level, sessionsPerWeek, minutesPerSession, avoidAreas}
+지시: 초보자의 강도는 낮게 유지한다. avoidAreas에 부담을 줄 수 있는 동작은 추천하지 않는다. 통증·질환은 전문가 상담을 안내한다. 정해진 JSON 형식으로만 답한다.</pre>
+      <h3>기대 출력 형식</h3><pre>{"source":"ai","summary":"...","days":[{"day":"월","title":"...","minutes":20,"exercises":[{"name":"...","sets":1}]}],"excludedMoves":["..."],"safetyNotes":["..."]}</pre>
+      <p>현재 파일은 서버와 AI가 연결되지 않은 클릭형 와이어프레임입니다. 선택한 부위가 계획과 제외 동작에 반영되는 흐름을 규칙 기반으로 시연합니다.</p>
+    </details>
+  </main>
+
+  <dialog id="demo-dialog" aria-labelledby="demo-title"><h2 id="demo-title">v0.2 시연 안내</h2><p>운동 조건을 고르면 규칙 기반 예시 계획이 만들어집니다. AI 연결과 실제 사용자 순위는 아직 제공되지 않아요.</p><p class="muted">이 안내는 첫 방문에 한 번 표시됩니다.</p><button class="btn" id="intro-close">시작하기</button></dialog>
+  <script>
+    const key = "ai-trainer-wireframe-v02";
+    const introKey = "ai-trainer-wireframe-v02-intro-seen";
+    const daysByFrequency = {2:["화","목"],3:["월","수","금"],4:["월","화","목","금"],5:["월","화","수","목","금"]};
+    const catalog = [
+      {name:"복식 호흡", dose:"1분 × 2회", areas:[], intensity:1},
+      {name:"손목 가볍게 풀기", dose:"좌우 20초", areas:[], intensity:1},
+      {name:"천천히 걷기", dose:"5분", areas:["무릎"], intensity:1},
+      {name:"벽 푸시업", dose:"8회 × 1세트", areas:["어깨"], intensity:1},
+      {name:"글루트 브리지", dose:"8회 × 1세트", areas:["허리"], intensity:1},
+      {name:"앉아서 옆구리 늘리기", dose:"좌우 20초", areas:["허리","어깨"], intensity:1},
+      {name:"의자 스쿼트", dose:"8회 × 2세트", areas:["무릎"], intensity:2},
+      {name:"버드독", dose:"좌우 6회", areas:["허리","어깨"], intensity:2}
+    ];
+    const priority = {
+      "근력 강화":["벽 푸시업","글루트 브리지","의자 스쿼트","버드독","천천히 걷기"],
+      "체력 향상":["천천히 걷기","의자 스쿼트","벽 푸시업","글루트 브리지"],
+      "체중 감량":["천천히 걷기","의자 스쿼트","글루트 브리지","벽 푸시업"],
+      "유연성 향상":["앉아서 옆구리 늘리기","천천히 걷기","글루트 브리지","벽 푸시업"]
+    };
+    const fresh = () => ({nickname:"운동하는 나", goal:"근력 강화", level:"입문", frequency:3, duration:20, avoid:[], plan:null, completed:0, totalCompleted:0, xp:0});
+    function readState() { try { return {...fresh(),...JSON.parse(localStorage.getItem(key) || "{}")} } catch { return fresh(); } }
+    let state = readState();
+    function save() { try { localStorage.setItem(key,JSON.stringify(state)); } catch {} }
+    function announce(message) { const el=document.getElementById("notice"); el.textContent=message; el.classList.add("visible"); clearTimeout(announce.timer); announce.timer=setTimeout(()=>el.classList.remove("visible"),3300); }
+    function show(id) { const target=document.getElementById(id); if (!target?.classList.contains("phone")) return; document.querySelectorAll(".phone").forEach(el=>el.classList.toggle("active",el===target)); const tab=id==="detail"?"plan":id; document.querySelectorAll(".nav button").forEach(el=>{const active=el.dataset.target===tab; el.classList.toggle("active",active); if(active) el.setAttribute("aria-current","page"); else el.removeAttribute("aria-current");}); window.scrollTo(0,0); target.querySelector("h2")?.focus({preventScroll:true}); }
+    function makeNav() { const items=[["home","⌂","홈"],["plan","▤","계획"],["record","▥","기록"],["profile","⚙","내 정보"]]; document.querySelectorAll(".nav").forEach(nav=>{nav.innerHTML=items.map(([id,icon,label])=>`<button type="button" data-target="${id}" aria-label="${label}" onclick="show('${id}')"><span aria-hidden="true">${icon}</span><span>${label}</span></button>`).join("");}); }
+    function renderForm() { document.getElementById("goal").value=state.goal; document.getElementById("level").value=state.level; document.getElementById("frequency").value=String(state.frequency); document.getElementById("duration").value=String(state.duration); document.querySelectorAll('input[name="avoid"]').forEach(el=>el.checked=state.avoid.includes(el.value)); document.getElementById("nickname").value=state.nickname; }
+    function makePlan() {
+      const avoid=state.avoid;
+      const excluded=catalog.filter(item=>item.areas.some(area=>avoid.includes(area))).map(item=>item.name);
+      if(avoid.length>=2) return {status:"review",excluded,exercises:[]};
+      const cap=state.level==="입문"?1:state.level==="중급"?2:3;
+      const available=catalog.filter(item=>item.intensity<=cap && !item.areas.some(area=>avoid.includes(area)));
+      const ordered=[...(priority[state.goal]||[]),"복식 호흡","손목 가볍게 풀기"];
+      const exercises=ordered.map(name=>available.find(item=>item.name===name)).filter(Boolean).filter((item,index,array)=>array.findIndex(other=>other.name===item.name)===index).slice(0,4);
+      if(exercises.length<3) return {status:"review",excluded,exercises:[]};
+      return {status:"ready",excluded,exercises};
+    }
+    function generatePlan(event) { event.preventDefault(); state.goal=document.getElementById("goal").value; state.level=document.getElementById("level").value; state.frequency=Number(document.getElementById("frequency").value); state.duration=Number(document.getElementById("duration").value); state.avoid=[...document.querySelectorAll('input[name="avoid"]:checked')].map(el=>el.value); state.plan=makePlan(); state.completed=0; save(); render(); show("plan"); announce(state.plan.status==="ready"?"입력한 조건과 피할 부위를 반영했어요.":"안전을 위해 자동 추천을 보류했어요."); }
+    function render() {
+      document.getElementById("home-name").textContent=state.nickname;
+      const hasPlan=!!state.plan;
+      document.getElementById("home-start").hidden=state.plan?.status==="ready";
+      document.getElementById("home-progress").hidden=state.plan?.status!=="ready";
+      document.getElementById("home-count").textContent=`${state.completed} / ${state.frequency}회 완료`;
+      document.getElementById("home-progress-bar").style.width=`${Math.min(100,100*state.completed/state.frequency)}%`;
+      document.getElementById("plan-empty").hidden=hasPlan;
+      document.getElementById("plan-result").hidden=!hasPlan;
+      if(hasPlan) {
+        document.getElementById("plan-summary").textContent=`${state.goal} · ${state.level} · 주 ${state.frequency}회 · 회당 ${state.duration}분`;
+        document.getElementById("plan-restrictions").textContent=`피할 부위: ${state.avoid.length?state.avoid.join(", "):"선택 없음"}`;
+        document.getElementById("plan-exclusions").textContent=`계획에서 제외한 동작: ${state.plan.excluded.length?state.plan.excluded.join(", "):"없음"}`;
+        const ready=state.plan.status==="ready";
+        document.getElementById("plan-ready").hidden=!ready;
+        document.getElementById("plan-review").hidden=ready;
+        if(ready) {
+          const schedule=document.getElementById("schedule"); schedule.replaceChildren();
+          daysByFrequency[state.frequency].forEach((day,index)=>{const row=document.createElement("div"); row.className="workout"; const dayEl=document.createElement("span"); dayEl.className="day"; dayEl.textContent=day; const body=document.createElement("div"); const name=document.createElement("strong"); name.textContent=`${state.goal} · ${index+1}일차`; const meta=document.createElement("small"); meta.textContent=`${state.duration}분 · ${index<state.completed?"완료":"예정"}`; body.append(name,meta); const btn=document.createElement("button"); btn.className="btn small secondary"; btn.textContent="상세"; btn.setAttribute("aria-label",`${day}요일 운동 상세`); btn.addEventListener("click",()=>showDetail(index)); row.append(dayEl,body,btn); schedule.append(row);});
+        }
+      }
+      const hasRecord=state.totalCompleted>0;
+      document.getElementById("record-empty").hidden=hasRecord;
+      document.getElementById("record-result").hidden=!hasRecord;
+      document.getElementById("record-count").textContent=String(state.totalCompleted);
+      document.getElementById("record-xp").textContent=String(state.xp);
+      document.getElementById("record-ratio").textContent=`${state.completed} / ${state.frequency}회`;
+      document.getElementById("record-progress-bar").style.width=`${Math.min(100,100*state.completed/state.frequency)}%`;
+      document.getElementById("record-message").textContent=state.completed>=state.frequency?"이번 주 목표를 달성했어요.":"다음 운동을 완료하면 이번 주 진행률이 올라가요.";
+    }
+    let detailIndex=0;
+    function showDetail(index) { if(state.plan?.status!=="ready") return; detailIndex=index; document.getElementById("detail-title").textContent=`${state.goal} · ${index+1}일차`; document.getElementById("detail-summary").textContent=`${daysByFrequency[state.frequency][index]}요일 · ${state.duration}분 · ${state.level}`; const list=document.getElementById("exercise-list"); list.replaceChildren(); state.plan.exercises.forEach(item=>{const row=document.createElement("div");row.className="exercise";row.textContent=`${item.name} · ${item.dose}`;list.append(row);}); const button=document.getElementById("complete-button"); button.disabled=index<state.completed || index>state.completed; button.textContent=index<state.completed?"완료 기록됨":index>state.completed?"앞선 운동 완료 후 기록 가능":"운동 완료 기록하기"; show("detail"); }
+    function completeWorkout() { if(state.plan?.status!=="ready" || detailIndex!==state.completed || state.completed>=state.frequency) return; state.completed++; state.totalCompleted++; state.xp+=40; save(); render(); show("record"); announce("운동 완료! 기록과 진행률을 반영했어요."); }
+    function saveNickname(event) { event.preventDefault(); state.nickname=document.getElementById("nickname").value.trim().slice(0,20)||"운동하는 나"; save(); render(); renderForm(); announce("닉네임을 저장했어요."); }
+    function resetDemo() { if(!window.confirm("v0.2 시연 기록과 조건을 초기화할까요?")) return; state=fresh(); save(); renderForm(); render(); show("home"); announce("시연 데이터를 초기화했어요."); }
+    function openIntro() { document.getElementById("demo-dialog").showModal(); }
+    document.getElementById("conditions").addEventListener("submit",generatePlan);
+    document.getElementById("nickname-form").addEventListener("submit",saveNickname);
+    document.getElementById("intro-close").addEventListener("click",()=>{document.getElementById("demo-dialog").close(); try{localStorage.setItem(introKey,"1");}catch{}});
+    makeNav(); renderForm(); render(); show("home");
+    try { if(!localStorage.getItem(introKey)) openIntro(); } catch { openIntro(); }
+  </script>
+</body>
+</html>
