@@ -1,58 +1,202 @@
 {
   "체력 향상": [
     {
-      "title": "전신 컨디셔닝",
-      "summary": "스쿼트 · 니푸시업 · 제자리 걷기"
+      "title": "전신 맨몸 컨디셔닝",
+      "summary": "스쿼트 · 니푸시업 · 제자리 걷기",
+      "place": "home",
+      "workoutType": "bodyweight"
     },
     {
-      "title": "저강도 유산소",
-      "summary": "사이드 스텝 · 마운틴 클라이머"
+      "title": "코어 맨몸 밸런스",
+      "summary": "버드독 · 데드버그 · 플랭크",
+      "place": "home",
+      "workoutType": "bodyweight"
     },
     {
-      "title": "코어 밸런스",
-      "summary": "버드독 · 데드버그 · 플랭크"
+      "title": "덤벨 기초 체력",
+      "summary": "덤벨 스쿼트 · 덤벨 로우 · 제자리 걷기",
+      "place": "home",
+      "workoutType": "equipment"
+    },
+    {
+      "title": "밴드 전신 컨디셔닝",
+      "summary": "밴드 로우 · 밴드 스쿼트 · 제자리 걷기",
+      "place": "home",
+      "workoutType": "mixed"
+    },
+    {
+      "title": "헬스장 맨몸 서킷",
+      "summary": "스쿼트 · 푸시업 · 마운틴 클라이머",
+      "place": "gym",
+      "workoutType": "bodyweight"
+    },
+    {
+      "title": "머신 기초 컨디셔닝",
+      "summary": "레그 프레스 · 랫 풀다운 · 실내 자전거",
+      "place": "gym",
+      "workoutType": "equipment"
+    },
+    {
+      "title": "헬스장 전신 혼합",
+      "summary": "고블릿 스쿼트 · 푸시업 · 시티드 로우",
+      "place": "gym",
+      "workoutType": "mixed"
+    },
+    {
+      "title": "헬스장 코어 혼합",
+      "summary": "플랭크 · 케이블 로테이션 · 백 익스텐션",
+      "place": "gym",
+      "workoutType": "mixed"
     }
   ],
   "체중 감량": [
     {
-      "title": "활력 카디오",
-      "summary": "제자리 걷기 · 스텝잭 · 스쿼트"
+      "title": "홈트 맨몸 카디오",
+      "summary": "스텝잭 · 스쿼트 · 제자리 걷기",
+      "place": "home",
+      "workoutType": "bodyweight"
     },
     {
-      "title": "전신 인터벌",
-      "summary": "런지 · 니업 · 숄더탭"
+      "title": "저충격 맨몸 인터벌",
+      "summary": "사이드 스텝 · 리버스 런지 · 니업",
+      "place": "home",
+      "workoutType": "bodyweight"
     },
     {
-      "title": "지방 연소 서킷",
-      "summary": "스쿼트 · 펀치 · 마운틴 클라이머"
+      "title": "덤벨 홈트 서킷",
+      "summary": "덤벨 스쿼트 · 덤벨 로우 · 제자리 걷기",
+      "place": "home",
+      "workoutType": "equipment"
+    },
+    {
+      "title": "밴드 혼합 인터벌",
+      "summary": "밴드 로우 · 스텝잭 · 스쿼트",
+      "place": "home",
+      "workoutType": "mixed"
+    },
+    {
+      "title": "헬스장 맨몸 카디오",
+      "summary": "마운틴 클라이머 · 런지 · 플랭크",
+      "place": "gym",
+      "workoutType": "bodyweight"
+    },
+    {
+      "title": "유산소 머신 루틴",
+      "summary": "트레드밀 걷기 · 실내 자전거 · 일립티컬",
+      "place": "gym",
+      "workoutType": "equipment"
+    },
+    {
+      "title": "헬스장 혼합 서킷",
+      "summary": "케틀벨 데드리프트 · 스텝업 · 플랭크",
+      "place": "gym",
+      "workoutType": "mixed"
+    },
+    {
+      "title": "전신 혼합 인터벌",
+      "summary": "레그 프레스 · 마운틴 클라이머 · 케이블 로우",
+      "place": "gym",
+      "workoutType": "mixed"
     }
   ],
   "근력 강화": [
     {
-      "title": "하체 기초 근력",
-      "summary": "스쿼트 · 리버스 런지 · 힙브릿지"
+      "title": "홈트 맨몸 근력",
+      "summary": "스쿼트 · 니푸시업 · 힙브릿지",
+      "place": "home",
+      "workoutType": "bodyweight"
     },
     {
-      "title": "상체 기초 근력",
-      "summary": "니푸시업 · 숄더탭 · 슈퍼맨"
+      "title": "맨몸 코어 근력",
+      "summary": "플랭크 · 버드독 · 리버스 런지",
+      "place": "home",
+      "workoutType": "bodyweight"
     },
     {
-      "title": "전신 근력",
-      "summary": "스쿼트 · 푸시업 · 플랭크"
+      "title": "덤벨 상하체 근력",
+      "summary": "덤벨 스쿼트 · 덤벨 로우 · 덤벨 컬",
+      "place": "home",
+      "workoutType": "equipment"
+    },
+    {
+      "title": "밴드 혼합 근력",
+      "summary": "밴드 스쿼트 · 푸시업 · 밴드 로우",
+      "place": "home",
+      "workoutType": "mixed"
+    },
+    {
+      "title": "헬스장 맨몸 근력",
+      "summary": "풀업 보조 동작 · 푸시업 · 런지",
+      "place": "gym",
+      "workoutType": "bodyweight"
+    },
+    {
+      "title": "머신 근력 기초",
+      "summary": "레그 프레스 · 체스트 프레스 · 랫 풀다운",
+      "place": "gym",
+      "workoutType": "equipment"
+    },
+    {
+      "title": "프리웨이트 혼합",
+      "summary": "바벨 스쿼트 · 푸시업 · 덤벨 로우",
+      "place": "gym",
+      "workoutType": "mixed"
+    },
+    {
+      "title": "전신 근력 혼합",
+      "summary": "덤벨 런지 · 플랭크 · 케이블 로우",
+      "place": "gym",
+      "workoutType": "mixed"
     }
   ],
   "유연성 향상": [
     {
-      "title": "전신 모빌리티",
-      "summary": "캣카우 · 런지 스트레치 · 회전"
+      "title": "홈트 맨몸 모빌리티",
+      "summary": "캣카우 · 런지 스트레치 · 흉추 회전",
+      "place": "home",
+      "workoutType": "bodyweight"
     },
     {
-      "title": "하체 유연성",
-      "summary": "햄스트링 · 고관절 · 종아리"
+      "title": "전신 맨몸 스트레칭",
+      "summary": "햄스트링 스트레치 · 고관절 스트레치 · 종아리 스트레치",
+      "place": "home",
+      "workoutType": "bodyweight"
     },
     {
-      "title": "회복 스트레칭",
-      "summary": "목 · 어깨 · 척추 · 하체"
+      "title": "소도구 가동성 루틴",
+      "summary": "폼롤러 마사지 · 스트레칭 밴드 어깨 열기 · 고관절 스트레치",
+      "place": "home",
+      "workoutType": "equipment"
+    },
+    {
+      "title": "맨몸·밴드 혼합 회복",
+      "summary": "캣카우 · 밴드 풀어파트 · 런지 스트레치",
+      "place": "home",
+      "workoutType": "mixed"
+    },
+    {
+      "title": "헬스장 맨몸 모빌리티",
+      "summary": "월 슬라이드 · 월드 그레이티스트 스트레치 · 딥 스쿼트 홀드",
+      "place": "gym",
+      "workoutType": "bodyweight"
+    },
+    {
+      "title": "헬스장 소도구 스트레칭",
+      "summary": "폼롤러 마사지 · 케이블 가벼운 가동범위 운동 · 고관절 스트레치",
+      "place": "gym",
+      "workoutType": "equipment"
+    },
+    {
+      "title": "기구·맨몸 혼합 회복",
+      "summary": "밴드 풀어파트 · 캣카우 · 흉추 회전",
+      "place": "gym",
+      "workoutType": "mixed"
+    },
+    {
+      "title": "전신 혼합 모빌리티",
+      "summary": "폼롤러 마사지 · 런지 스트레치 · 월 슬라이드",
+      "place": "gym",
+      "workoutType": "mixed"
     }
   ]
 }
