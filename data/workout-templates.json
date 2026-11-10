@@ -198,5 +198,404 @@
       "place": "gym",
       "workoutType": "mixed"
     }
-  ]
+  ],
+  "_exerciseGuides": {
+    "바벨 스쿼트": {
+      "type": "image",
+      "sourceTitle": "Barbell Full Squat",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "author": "Workout Guru",
+      "license": "CC BY-SA 4.0",
+      "aiGenerated": false,
+      "url": "https://wger.de/media/exercise-images/1801/60043328-1cfb-4289-9865-aaf64d5aaa28.jpg",
+      "sourceUrl": "https://wger.de/api/v2/exerciseinfo/1801/"
+    },
+    "니업": {
+      "type": "image",
+      "sourceTitle": "High knees",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "author": null,
+      "license": "CC BY-SA 4.0",
+      "aiGenerated": false,
+      "url": "https://wger.de/media/exercise-images/983/16245344-9957-4a24-8d61-f9939ed5f964.png",
+      "sourceUrl": "https://wger.de/api/v2/exerciseinfo/983/"
+    },
+    "월 슬라이드": {
+      "reason": "동작이 정확히 일치하고 이용 조건이 확인된 사진 또는 영상을 찾는 중",
+      "type": "pending"
+    },
+    "리버스 런지": {
+      "type": "image",
+      "sourceTitle": "Reverse lunges",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "author": "philip",
+      "license": "CC BY-SA 4.0",
+      "aiGenerated": false,
+      "url": "https://wger.de/media/exercise-images/999/d0931eb3-8db0-4049-bb08-aa4036072056.jfif",
+      "sourceUrl": "https://wger.de/api/v2/exerciseinfo/999/"
+    },
+    "스트레칭 밴드 어깨 열기": {
+      "reason": "동작이 정확히 일치하고 이용 조건이 확인된 사진 또는 영상을 찾는 중",
+      "type": "pending"
+    },
+    "덤벨 컬": {
+      "type": "image",
+      "sourceTitle": "Biceps Curls With Dumbbell",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+      "author": "Everkinetic",
+      "license": "CC BY-SA 3.0",
+      "aiGenerated": false,
+      "url": "https://wger.de/media/exercise-images/81/Biceps-curl-1.png",
+      "sourceUrl": "https://wger.de/api/v2/exerciseinfo/92/"
+    },
+    "데드버그": {
+      "reason": "동작이 정확히 일치하고 이용 조건이 확인된 사진 또는 영상을 찾는 중",
+      "type": "pending"
+    },
+    "사이드 스텝": {
+      "type": "image",
+      "sourceTitle": "Hip-Out and Hip-In Lateral Steps",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "author": null,
+      "license": "CC BY-SA 4.0",
+      "aiGenerated": false,
+      "url": "https://wger.de/media/exercise-images/2618/e0a5c993-37a8-4271-9056-7cdf1ad677be.jpg",
+      "sourceUrl": "https://wger.de/api/v2/exerciseinfo/2618/"
+    },
+    "힙브릿지": {
+      "type": "image",
+      "sourceTitle": "Glute Bridge",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "author": null,
+      "license": "CC BY-SA 4.0",
+      "aiGenerated": false,
+      "url": "https://wger.de/media/exercise-images/265/7528acb4-b2cc-4b75-b6ae-d514cbd4f78b.png",
+      "sourceUrl": "https://wger.de/api/v2/exerciseinfo/265/"
+    },
+    "종아리 스트레치": {
+      "type": "image",
+      "sourceTitle": "Standing Calf Stretch",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "author": "erikocobra",
+      "license": "CC BY-SA 4.0",
+      "aiGenerated": false,
+      "url": "https://wger.de/media/exercise-images/1239/5026373a-a7b4-4e26-a0aa-c46634205196.jpg",
+      "sourceUrl": "https://wger.de/api/v2/exerciseinfo/1239/"
+    },
+    "버드독": {
+      "type": "image",
+      "sourceTitle": "Bird Dog",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "author": "Settebello",
+      "license": "CC BY-SA 4.0",
+      "aiGenerated": false,
+      "url": "https://wger.de/media/exercise-images/1572/3d14e761-a73d-49da-8804-f3016a7573ff.png",
+      "sourceUrl": "https://wger.de/api/v2/exerciseinfo/1572/"
+    },
+    "케이블 가벼운 가동범위 운동": {
+      "reason": "동작이 정확히 일치하고 이용 조건이 확인된 사진 또는 영상을 찾는 중",
+      "type": "pending"
+    },
+    "체스트 프레스": {
+      "type": "image",
+      "sourceTitle": "Chest Press",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "author": "roneydya",
+      "license": "CC BY-SA 4.0",
+      "aiGenerated": false,
+      "url": "https://wger.de/media/exercise-images/129/b263c968-e067-4750-916a-d8758a7df23e.webp",
+      "sourceUrl": "https://wger.de/api/v2/exerciseinfo/129/"
+    },
+    "흉추 회전": {
+      "reason": "동작이 정확히 일치하고 이용 조건이 확인된 사진 또는 영상을 찾는 중",
+      "type": "pending"
+    },
+    "스텝잭": {
+      "type": "image",
+      "sourceTitle": "Step Jack",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "author": "Anon#2",
+      "license": "CC BY-SA 4.0",
+      "aiGenerated": true,
+      "url": "https://wger.de/media/exercise-images/1962/74041371-1019-4f89-9ebe-cec792484a46.png",
+      "sourceUrl": "https://wger.de/api/v2/exerciseinfo/1962/"
+    },
+    "플랭크": {
+      "type": "image",
+      "sourceTitle": "Plank",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "author": "utkb",
+      "license": "CC BY-SA 4.0",
+      "aiGenerated": false,
+      "url": "https://wger.de/media/exercise-images/458/b7bd9c28-9f1d-4647-bd17-ab6a3adf5770.png",
+      "sourceUrl": "https://wger.de/api/v2/exerciseinfo/458/"
+    },
+    "일립티컬": {
+      "reason": "동작이 정확히 일치하고 이용 조건이 확인된 사진 또는 영상을 찾는 중",
+      "type": "pending"
+    },
+    "밴드 로우": {
+      "reason": "동작이 정확히 일치하고 이용 조건이 확인된 사진 또는 영상을 찾는 중",
+      "type": "pending"
+    },
+    "풀업 보조 동작": {
+      "type": "video",
+      "sourceTitle": "Pull Ups on Machine",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "author": "Goulart",
+      "formatNote": "HEVC 동영상: 기기에 따라 재생되지 않을 수 있습니다.",
+      "license": "CC BY-SA 4.0",
+      "url": "https://wger.de/media/exercise-video/477/2e23bb52-2782-40c8-bf88-fa2d2e2a9a0d.MOV",
+      "sourceUrl": "https://wger.de/api/v2/exerciseinfo/477/"
+    },
+    "덤벨 스쿼트": {
+      "type": "image",
+      "sourceTitle": "Dumbbell Front Squat",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "author": "AlucardEvil40",
+      "license": "CC BY-SA 4.0",
+      "aiGenerated": false,
+      "url": "https://wger.de/media/exercise-images/1640/bdea82f1-15ef-4649-8b5a-1303cfc178e7.webp",
+      "sourceUrl": "https://wger.de/api/v2/exerciseinfo/1640/"
+    },
+    "푸시업": {
+      "type": "image",
+      "sourceTitle": "Push-Up",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "author": "Settebello",
+      "license": "CC BY-SA 4.0",
+      "aiGenerated": false,
+      "url": "https://wger.de/media/exercise-images/1551/a6a9e561-3965-45c6-9f2b-ee671e1a3a45.png",
+      "sourceUrl": "https://wger.de/api/v2/exerciseinfo/1551/"
+    },
+    "스쿼트": {
+      "type": "image",
+      "sourceTitle": "Slow Squat",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "author": "Anon#2",
+      "license": "CC BY-SA 4.0",
+      "aiGenerated": true,
+      "url": "https://wger.de/media/exercise-images/1963/db285682-1ab3-4be0-ae00-5117ecce1ee6.png",
+      "sourceUrl": "https://wger.de/api/v2/exerciseinfo/1963/"
+    },
+    "캣카우": {
+      "reason": "동작이 정확히 일치하고 이용 조건이 확인된 사진 또는 영상을 찾는 중",
+      "type": "pending"
+    },
+    "실내 자전거": {
+      "type": "image",
+      "sourceTitle": "Stationary bike cardio",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "author": null,
+      "license": "CC BY-SA 4.0",
+      "aiGenerated": false,
+      "url": "https://wger.de/media/exercise-images/1618/c18baedc-ff98-4fb2-b4f5-38a05c12f637.png",
+      "sourceUrl": "https://wger.de/api/v2/exerciseinfo/1618/"
+    },
+    "덤벨 런지": {
+      "type": "image",
+      "sourceTitle": "Dumbbell Lunges Walking",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+      "author": "Everkinetic",
+      "license": "CC BY-SA 3.0",
+      "aiGenerated": false,
+      "url": "https://wger.de/media/exercise-images/113/Walking-lunges-1.png",
+      "sourceUrl": "https://wger.de/api/v2/exerciseinfo/206/"
+    },
+    "마운틴 클라이머": {
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Airmen_perform_%22mountain_climbers%22.jpg",
+      "type": "image",
+      "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/14/Airmen_perform_%22mountain_climbers%22.jpg/960px-Airmen_perform_%22mountain_climbers%22.jpg",
+      "license": "미국 연방정부 저작물 · 퍼블릭 도메인",
+      "sourceTitle": "Airmen perform \"mountain climbers\"",
+      "author": "US Air Force / Samuel King Jr.",
+      "sourceName": "Wikimedia Commons",
+      "aiGenerated": false,
+      "licenseUrl": "https://commons.wikimedia.org/wiki/File:Airmen_perform_%22mountain_climbers%22.jpg#Licensing"
+    },
+    "밴드 풀어파트": {
+      "reason": "동작이 정확히 일치하고 이용 조건이 확인된 사진 또는 영상을 찾는 중",
+      "type": "pending"
+    },
+    "스텝업": {
+      "type": "image",
+      "sourceTitle": "Step-ups",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "author": null,
+      "license": "CC BY-SA 4.0",
+      "aiGenerated": true,
+      "url": "https://wger.de/media/exercise-images/981/f9377a7e-eb58-4cca-b805-2d36863aeb03.png",
+      "sourceUrl": "https://wger.de/api/v2/exerciseinfo/981/"
+    },
+    "레그 프레스": {
+      "type": "image",
+      "sourceTitle": "Leg Press",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "author": null,
+      "license": "CC BY-SA 4.0",
+      "aiGenerated": false,
+      "url": "https://wger.de/media/exercise-images/371/d2136f96-3a43-4d4c-9944-1919c4ca1ce1.webp",
+      "sourceUrl": "https://wger.de/api/v2/exerciseinfo/371/"
+    },
+    "케이블 로테이션": {
+      "reason": "동작이 정확히 일치하고 이용 조건이 확인된 사진 또는 영상을 찾는 중",
+      "type": "pending"
+    },
+    "케틀벨 데드리프트": {
+      "type": "image",
+      "sourceTitle": "Kettlebell deadlifts",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "author": null,
+      "license": "CC BY-SA 4.0",
+      "aiGenerated": true,
+      "url": "https://wger.de/media/exercise-images/1003/772d6e47-3865-4944-9255-7435d0b06782.png",
+      "sourceUrl": "https://wger.de/api/v2/exerciseinfo/1003/"
+    },
+    "시티드 로우": {
+      "type": "image",
+      "sourceTitle": "Seated Row (Machine)",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "author": "barry",
+      "license": "CC BY-SA 4.0",
+      "aiGenerated": false,
+      "url": "https://wger.de/media/exercise-images/1725/f0ebd44e-b8e1-400c-b598-ca371f3a07af.png",
+      "sourceUrl": "https://wger.de/api/v2/exerciseinfo/1725/"
+    },
+    "덤벨 로우": {
+      "type": "image",
+      "sourceTitle": "Bent Over Dumbbell Rows (Single Arm)",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "author": "Franpol",
+      "license": "CC BY-SA 4.0",
+      "aiGenerated": false,
+      "url": "https://wger.de/media/exercise-images/81/a751a438-ae2d-4751-8d61-cef0e9292174.png",
+      "sourceUrl": "https://wger.de/api/v2/exerciseinfo/81/"
+    },
+    "고블릿 스쿼트": {
+      "type": "image",
+      "sourceTitle": "Dumbbell Goblet Squat",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "author": "philip",
+      "license": "CC BY-SA 4.0",
+      "aiGenerated": false,
+      "url": "https://wger.de/media/exercise-images/203/1c052351-2af0-4227-aeb0-244008e4b0a8.jpeg",
+      "sourceUrl": "https://wger.de/api/v2/exerciseinfo/203/"
+    },
+    "트레드밀 걷기": {
+      "type": "image",
+      "sourceTitle": "Treadmill Cardio",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "author": null,
+      "license": "CC BY-SA 4.0",
+      "aiGenerated": false,
+      "url": "https://wger.de/media/exercise-images/1615/7792295c-83b6-4ea8-9353-ce02f0ad2559.jpg",
+      "sourceUrl": "https://wger.de/api/v2/exerciseinfo/1615/"
+    },
+    "백 익스텐션": {
+      "type": "image",
+      "sourceTitle": "Hyperextensions",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+      "author": "Everkinetic",
+      "license": "CC BY-SA 3.0",
+      "aiGenerated": false,
+      "url": "https://wger.de/media/exercise-images/128/Hyperextensions-1.png",
+      "sourceUrl": "https://wger.de/api/v2/exerciseinfo/301/"
+    },
+    "제자리 걷기": {
+      "type": "image",
+      "sourceTitle": "Marching High Knees",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "author": "Anon#2",
+      "license": "CC BY-SA 4.0",
+      "aiGenerated": true,
+      "url": "https://wger.de/media/exercise-images/1965/03c08a42-dedb-4a46-8d15-acaf497a35a2.png",
+      "sourceUrl": "https://wger.de/api/v2/exerciseinfo/1965/"
+    },
+    "런지 스트레치": {
+      "type": "image",
+      "sourceTitle": "Runners Lunge Stretch",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "author": "Davidgj32",
+      "license": "CC BY-SA 4.0",
+      "aiGenerated": false,
+      "url": "https://wger.de/media/exercise-images/1874/66fca8a5-41e8-42d1-8776-5e46a4902650.png",
+      "sourceUrl": "https://wger.de/api/v2/exerciseinfo/1874/"
+    },
+    "밴드 스쿼트": {
+      "reason": "동작이 정확히 일치하고 이용 조건이 확인된 사진 또는 영상을 찾는 중",
+      "type": "pending"
+    },
+    "폼롤러 마사지": {
+      "type": "image",
+      "sourceTitle": "Blackroll",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "author": null,
+      "license": "CC BY-SA 4.0",
+      "aiGenerated": false,
+      "url": "https://wger.de/media/exercise-images/1363/1dba566b-e799-4bde-abb0-c011a3c75e52.webp",
+      "sourceUrl": "https://wger.de/api/v2/exerciseinfo/1363/"
+    },
+    "니푸시업": {
+      "reason": "동작이 정확히 일치하고 이용 조건이 확인된 사진 또는 영상을 찾는 중",
+      "type": "pending"
+    },
+    "딥 스쿼트 홀드": {
+      "reason": "동작이 정확히 일치하고 이용 조건이 확인된 사진 또는 영상을 찾는 중",
+      "type": "pending"
+    },
+    "월드 그레이티스트 스트레치": {
+      "reason": "동작이 정확히 일치하고 이용 조건이 확인된 사진 또는 영상을 찾는 중",
+      "type": "pending"
+    },
+    "고관절 스트레치": {
+      "type": "image",
+      "sourceTitle": "Hip Flexor Stretch",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "author": "Davidgj32",
+      "license": "CC BY-SA 4.0",
+      "aiGenerated": false,
+      "url": "https://wger.de/media/exercise-images/1867/767631e5-10d2-46b8-b03f-cc298f96963b.png",
+      "sourceUrl": "https://wger.de/api/v2/exerciseinfo/1867/"
+    },
+    "런지": {
+      "type": "image",
+      "sourceTitle": "Lunges",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "author": "Franpol",
+      "license": "CC BY-SA 4.0",
+      "aiGenerated": false,
+      "url": "https://wger.de/media/exercise-images/984/5c7ffe68-e7b2-47f3-a22a-f9cc28640432.png",
+      "sourceUrl": "https://wger.de/api/v2/exerciseinfo/984/"
+    },
+    "랫 풀다운": {
+      "type": "image",
+      "sourceTitle": "Close-grip Lat Pull Down",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "author": "Franpol",
+      "license": "CC BY-SA 4.0",
+      "aiGenerated": false,
+      "url": "https://wger.de/media/exercise-images/158/0d51a0f2-622f-434b-beb8-1a003c54712a.png",
+      "sourceUrl": "https://wger.de/api/v2/exerciseinfo/158/"
+    },
+    "햄스트링 스트레치": {
+      "type": "image",
+      "sourceTitle": "Lying Hamstring Stretch with Band",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "author": "Davidgj32",
+      "license": "CC BY-SA 4.0",
+      "aiGenerated": false,
+      "url": "https://wger.de/media/exercise-images/1870/7465bbcf-3b86-42a6-8d2f-12a3d1f60a15.png",
+      "sourceUrl": "https://wger.de/api/v2/exerciseinfo/1870/"
+    },
+    "케이블 로우": {
+      "type": "image",
+      "sourceTitle": "Seated Cable Row",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "author": "Franpol",
+      "license": "CC BY-SA 4.0",
+      "aiGenerated": false,
+      "url": "https://wger.de/media/exercise-images/1117/2555c4c3-a84d-47db-b83b-cbf721f12e45.png",
+      "sourceUrl": "https://wger.de/api/v2/exerciseinfo/1117/"
+    }
+  }
 }
