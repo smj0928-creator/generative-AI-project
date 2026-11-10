@@ -102,6 +102,8 @@
           <div class="field"><label for="goal">운동 목표</label><select id="goal"><option>근력 강화</option><option>체력 향상</option><option>체중 감량</option><option>유연성 향상</option></select></div>
           <div class="field"><label for="level">운동 수준</label><select id="level"><option>입문</option><option>중급</option><option>상급</option></select></div>
           <div class="twocol"><div class="field"><label for="frequency">주당 횟수</label><select id="frequency"><option value="2">2회</option><option value="3" selected>3회</option><option value="4">4회</option><option value="5">5회</option></select></div><div class="field"><label for="duration">회당 시간</label><select id="duration"><option value="20" selected>20분</option><option value="30">30분</option><option value="45">45분</option></select></div></div>
+          <div class="twocol"><div class="field"><label for="place">운동 장소</label><select id="place"><option>홈트레이닝</option><option>헬스장</option></select></div><div class="field"><label for="workout-type">운동 방식</label><select id="workout-type"><option>맨몸운동</option><option>기구 운동</option><option>혼합 운동</option></select></div></div>
+          <p id="equipment-hint" class="muted" aria-live="polite"></p>
           <fieldset class="field"><legend>피하고 싶은 부위</legend><div class="choices"><label class="choice"><input type="checkbox" name="avoid" value="무릎">무릎</label><label class="choice"><input type="checkbox" name="avoid" value="허리">허리</label><label class="choice"><input type="checkbox" name="avoid" value="어깨">어깨</label></div><p class="muted">선택한 부위에 부담을 줄 수 있는 동작은 시연 계획에서 제외해요.</p></fieldset>
           <button class="btn" type="submit">이번 주 계획 만들기</button>
         </form>
@@ -117,7 +119,7 @@
         <div id="plan-empty" class="empty"><strong>아직 계획이 없어요</strong><span class="muted">홈에서 운동 조건을 입력해 주세요.</span><button class="btn secondary" onclick="show('home')">조건 입력하기</button></div>
         <div id="plan-result" hidden>
           <div class="card"><div class="row"><h3>계획에 반영한 조건</h3><span class="tag">규칙 기반 시연</span></div><p id="plan-summary" class="muted"></p><p id="plan-restrictions" class="muted"></p><p id="plan-exclusions" class="muted"></p></div>
-          <div id="plan-review" class="card safety" hidden><h3>안전 검토가 필요해요</h3><p>피하고 싶은 부위가 여러 곳이에요. 자동 추천을 멈췄어요. 통증·질환·재활 중이라면 전문가와 운동 범위를 상담해 주세요.</p><button class="btn secondary" onclick="show('home')">조건 다시 보기</button></div>
+          <div id="plan-review" class="card safety" hidden><h3>안전 검토가 필요해요</h3><p>선택한 조건에 맞는 시연 동작이 충분하지 않아 자동 추천을 멈췄어요. 통증·질환·재활 중이라면 전문가와 운동 범위를 상담해 주세요.</p><button class="btn secondary" onclick="show('home')">조건 다시 보기</button></div>
           <div id="plan-ready" hidden><h3>요일별 운동</h3><div id="schedule" class="schedule"></div><div class="card safety"><h3>시작 전 확인</h3><p>입문자는 가벼운 강도로 시작하세요. 통증이나 어지러움이 생기면 즉시 중단하고, 질환이나 재활 중이면 전문가와 상담하세요.</p><p class="muted">선택 부위 필터는 시연용 분류이며 개별 동작의 적합성을 보증하지 않아요.</p></div><button class="btn secondary" onclick="show('home')">조건 수정하기</button></div>
         </div>
       </div>
@@ -163,8 +165,8 @@
 
     <details class="spec"><summary>발표용 · AI 연결 설계와 v0.2 시연 범위 보기</summary>
       <h3>연결 흐름</h3><p>모바일 화면 → 서버 또는 프록시 → LLM → 금기 부위 필터·강도 상한 검사 → 주간 계획. AI 응답이 실패하거나 안전 검사를 통과하지 못하면 검증된 규칙 계획으로 전환합니다. 정적 페이지에는 API 키를 넣지 않습니다.</p>
-      <h3>입력과 프롬프트 예시</h3><pre>입력: {goal, level, sessionsPerWeek, minutesPerSession, avoidAreas}
-지시: 초보자의 강도는 낮게 유지한다. avoidAreas에 부담을 줄 수 있는 동작은 추천하지 않는다. 통증·질환은 전문가 상담을 안내한다. 정해진 JSON 형식으로만 답한다.</pre>
+      <h3>입력과 프롬프트 예시</h3><pre>입력: {goal, level, sessionsPerWeek, minutesPerSession, place, workoutType, avoidAreas}
+지시: 장소와 운동 방식에 맞는 도구를 고려하고 초보자의 강도는 낮게 유지한다. avoidAreas에 부담을 줄 수 있는 동작은 제외한다. 통증·질환은 전문가 상담을 안내한다. 정해진 JSON 형식으로만 답한다.</pre>
       <h3>기대 출력 형식</h3><pre>{"source":"ai","summary":"...","days":[{"day":"월","title":"...","minutes":20,"exercises":[{"name":"...","sets":1}]}],"excludedMoves":["..."],"safetyNotes":["..."]}</pre>
       <p>현재 파일은 서버와 AI가 연결되지 않은 클릭형 와이어프레임입니다. 선택한 부위가 계획과 제외 동작에 반영되는 흐름을 규칙 기반으로 시연합니다.</p>
     </details>
@@ -183,7 +185,13 @@
       {name:"글루트 브리지", dose:"8회 × 1세트", areas:["허리"], intensity:1},
       {name:"앉아서 옆구리 늘리기", dose:"좌우 20초", areas:["허리","어깨"], intensity:1},
       {name:"의자 스쿼트", dose:"8회 × 2세트", areas:["무릎"], intensity:2},
-      {name:"버드독", dose:"좌우 6회", areas:["허리","어깨"], intensity:2}
+      {name:"버드독", dose:"좌우 6회", areas:["허리","어깨"], intensity:2},
+      {name:"밴드 당기기", dose:"8회 × 1세트 · 밴드", areas:["어깨","허리"], intensity:1, equipment:true, place:"홈트레이닝"},
+      {name:"덤벨 컬", dose:"8회 × 1세트 · 가벼운 덤벨", areas:["어깨"], intensity:1, equipment:true, place:"홈트레이닝"},
+      {name:"밴드 발목 움직임", dose:"좌우 8회 · 밴드", areas:["무릎"], intensity:1, equipment:true, place:"홈트레이닝"},
+      {name:"시티드 로우", dose:"8회 × 1세트 · 로우 머신", areas:["어깨","허리"], intensity:1, equipment:true, place:"헬스장"},
+      {name:"레그 익스텐션", dose:"8회 × 1세트 · 운동 기구", areas:["무릎"], intensity:1, equipment:true, place:"헬스장"},
+      {name:"케이블 컬", dose:"8회 × 1세트 · 케이블", areas:["어깨"], intensity:1, equipment:true, place:"헬스장"}
     ];
     const priority = {
       "근력 강화":["벽 푸시업","글루트 브리지","의자 스쿼트","버드독","천천히 걷기"],
@@ -191,26 +199,30 @@
       "체중 감량":["천천히 걷기","의자 스쿼트","글루트 브리지","벽 푸시업"],
       "유연성 향상":["앉아서 옆구리 늘리기","천천히 걷기","글루트 브리지","벽 푸시업"]
     };
-    const fresh = () => ({nickname:"운동하는 나", goal:"근력 강화", level:"입문", frequency:3, duration:20, avoid:[], plan:null, completed:0, totalCompleted:0, xp:0});
+    const fresh = () => ({nickname:"운동하는 나", goal:"근력 강화", level:"입문", frequency:3, duration:20, place:"홈트레이닝", workoutType:"맨몸운동", avoid:[], plan:null, completed:0, totalCompleted:0, xp:0});
     function readState() { try { return {...fresh(),...JSON.parse(localStorage.getItem(key) || "{}")} } catch { return fresh(); } }
     let state = readState();
     function save() { try { localStorage.setItem(key,JSON.stringify(state)); } catch {} }
     function announce(message) { const el=document.getElementById("notice"); el.textContent=message; el.classList.add("visible"); clearTimeout(announce.timer); announce.timer=setTimeout(()=>el.classList.remove("visible"),3300); }
     function show(id) { const target=document.getElementById(id); if (!target?.classList.contains("phone")) return; document.querySelectorAll(".phone").forEach(el=>el.classList.toggle("active",el===target)); const tab=id==="detail"?"plan":id; document.querySelectorAll(".nav button").forEach(el=>{const active=el.dataset.target===tab; el.classList.toggle("active",active); if(active) el.setAttribute("aria-current","page"); else el.removeAttribute("aria-current");}); window.scrollTo(0,0); target.querySelector("h2")?.focus({preventScroll:true}); }
     function makeNav() { const items=[["home","⌂","홈"],["plan","▤","계획"],["record","▥","기록"],["profile","⚙","내 정보"]]; document.querySelectorAll(".nav").forEach(nav=>{nav.innerHTML=items.map(([id,icon,label])=>`<button type="button" data-target="${id}" aria-label="${label}" onclick="show('${id}')"><span aria-hidden="true">${icon}</span><span>${label}</span></button>`).join("");}); }
-    function renderForm() { document.getElementById("goal").value=state.goal; document.getElementById("level").value=state.level; document.getElementById("frequency").value=String(state.frequency); document.getElementById("duration").value=String(state.duration); document.querySelectorAll('input[name="avoid"]').forEach(el=>el.checked=state.avoid.includes(el.value)); document.getElementById("nickname").value=state.nickname; }
+    function updateEquipmentHint() { const place=document.getElementById("place").value; const type=document.getElementById("workout-type").value; document.getElementById("equipment-hint").textContent=type==="맨몸운동"?"맨몸운동 예시를 중심으로 구성해요.":place==="홈트레이닝"?"홈트레이닝의 기구·혼합 운동은 덤벨이나 밴드 등 소도구를 사용하는 예시예요.":"헬스장 기구를 사용하는 예시예요. 사용할 기구와 운동 적합성을 확인해 주세요."; }
+    function renderForm() { document.getElementById("goal").value=state.goal; document.getElementById("level").value=state.level; document.getElementById("frequency").value=String(state.frequency); document.getElementById("duration").value=String(state.duration); document.getElementById("place").value=state.place; document.getElementById("workout-type").value=state.workoutType; updateEquipmentHint(); document.querySelectorAll('input[name="avoid"]').forEach(el=>el.checked=state.avoid.includes(el.value)); document.getElementById("nickname").value=state.nickname; }
     function makePlan() {
       const avoid=state.avoid;
       const excluded=catalog.filter(item=>item.areas.some(area=>avoid.includes(area))).map(item=>item.name);
       if(avoid.length>=2) return {status:"review",excluded,exercises:[]};
       const cap=state.level==="입문"?1:state.level==="중급"?2:3;
       const available=catalog.filter(item=>item.intensity<=cap && !item.areas.some(area=>avoid.includes(area)));
-      const ordered=[...(priority[state.goal]||[]),"복식 호흡","손목 가볍게 풀기"];
-      const exercises=ordered.map(name=>available.find(item=>item.name===name)).filter(Boolean).filter((item,index,array)=>array.findIndex(other=>other.name===item.name)===index).slice(0,4);
+      const body=(priority[state.goal]||[]).map(name=>available.find(item=>item.name===name)).filter(Boolean);
+      const equipment=available.filter(item=>item.equipment && item.place===state.place);
+      if(state.workoutType!=="맨몸운동" && !equipment.length) return {status:"review",excluded,exercises:[]};
+      const chosen=state.workoutType==="맨몸운동"?body:state.workoutType==="기구 운동"?equipment:[body[0],equipment[0],...body.slice(1),...equipment.slice(1)];
+      const exercises=[...chosen,...available.filter(item=>["복식 호흡","손목 가볍게 풀기"].includes(item.name))].filter(Boolean).filter((item,index,array)=>array.findIndex(other=>other.name===item.name)===index).slice(0,4);
       if(exercises.length<3) return {status:"review",excluded,exercises:[]};
       return {status:"ready",excluded,exercises};
     }
-    function generatePlan(event) { event.preventDefault(); state.goal=document.getElementById("goal").value; state.level=document.getElementById("level").value; state.frequency=Number(document.getElementById("frequency").value); state.duration=Number(document.getElementById("duration").value); state.avoid=[...document.querySelectorAll('input[name="avoid"]:checked')].map(el=>el.value); state.plan=makePlan(); state.completed=0; save(); render(); show("plan"); announce(state.plan.status==="ready"?"입력한 조건과 피할 부위를 반영했어요.":"안전을 위해 자동 추천을 보류했어요."); }
+    function generatePlan(event) { event.preventDefault(); state.goal=document.getElementById("goal").value; state.level=document.getElementById("level").value; state.frequency=Number(document.getElementById("frequency").value); state.duration=Number(document.getElementById("duration").value); state.place=document.getElementById("place").value; state.workoutType=document.getElementById("workout-type").value; state.avoid=[...document.querySelectorAll('input[name="avoid"]:checked')].map(el=>el.value); state.plan=makePlan(); state.completed=0; save(); render(); show("plan"); announce(state.plan.status==="ready"?"장소와 방식, 피할 부위를 계획에 반영했어요.":"안전을 위해 자동 추천을 보류했어요."); }
     function render() {
       document.getElementById("home-name").textContent=state.nickname;
       const hasPlan=!!state.plan;
@@ -221,7 +233,7 @@
       document.getElementById("plan-empty").hidden=hasPlan;
       document.getElementById("plan-result").hidden=!hasPlan;
       if(hasPlan) {
-        document.getElementById("plan-summary").textContent=`${state.goal} · ${state.level} · 주 ${state.frequency}회 · 회당 ${state.duration}분`;
+        document.getElementById("plan-summary").textContent=`${state.goal} · ${state.level} · ${state.place} · ${state.workoutType} · 주 ${state.frequency}회 · 회당 ${state.duration}분`;
         document.getElementById("plan-restrictions").textContent=`피할 부위: ${state.avoid.length?state.avoid.join(", "):"선택 없음"}`;
         document.getElementById("plan-exclusions").textContent=`계획에서 제외한 동작: ${state.plan.excluded.length?state.plan.excluded.join(", "):"없음"}`;
         const ready=state.plan.status==="ready";
@@ -248,6 +260,8 @@
     function resetDemo() { if(!window.confirm("v0.2 시연 기록과 조건을 초기화할까요?")) return; state=fresh(); save(); renderForm(); render(); show("home"); announce("시연 데이터를 초기화했어요."); }
     function openIntro() { document.getElementById("demo-dialog").showModal(); }
     document.getElementById("conditions").addEventListener("submit",generatePlan);
+    document.getElementById("place").addEventListener("change",updateEquipmentHint);
+    document.getElementById("workout-type").addEventListener("change",updateEquipmentHint);
     document.getElementById("nickname-form").addEventListener("submit",saveNickname);
     document.getElementById("intro-close").addEventListener("click",()=>{document.getElementById("demo-dialog").close(); try{localStorage.setItem(introKey,"1");}catch{}});
     makeNav(); renderForm(); render(); show("home");
