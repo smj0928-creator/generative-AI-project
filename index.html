@@ -20,12 +20,13 @@
     <section id="settings" class="page"><div class="section-head"><button class="text-button" data-go="mypage">‹ 마이페이지</button><h2>앱 설정</h2></div><div class="card"><div class="setting"><div><b>운동 알림</b><div class="tiny">알림 기능은 준비 중입니다.</div></div><span class="setting-status">준비 중</span></div><div class="setting"><div><b>안전 안내</b><div class="tiny">운동 상세에서 항상 표시됩니다.</div></div><span class="setting-status">항상 켜짐</span></div></div><div class="card"><b>프로토타입 정보</b><p class="tiny">실제 계정 로그인과 서버 동기화는 연결되지 않았습니다. 계획과 기록은 현재 브라우저에 저장됩니다.</p></div></section>
   </div>
   <nav class="tabbar"><button class="tab active" data-page="home"><i>⌂</i>홈</button><button class="tab" data-page="plan"><i>▤</i>플랜</button><button class="tab" data-page="social"><i>♢</i>함께</button><button class="tab" data-page="mypage"><i>●</i>마이페이지</button></nav>
-  <div id="modal" class="modal"><div class="sheet"><button class="close" id="closeModal">×</button><div class="eyebrow" id="modalDay">오늘의 운동</div><h2 id="modalTitle"></h2><p class="tiny" id="modalDesc"></p><div id="exerciseList"></div><div class="safety"><b>⚠ 안전 안내</b><br><span id="safetyText"></span></div><button id="completeWorkout" class="primary wide">운동 완료하기</button></div></div><div id="toast" class="toast"></div>
+  <div id="modal" class="modal"><div class="sheet"><button class="close" id="closeModal">×</button><div class="eyebrow" id="modalDay">오늘의 운동</div><h2 id="modalTitle"></h2><p class="tiny" id="modalDesc"></p><div id="exerciseList"></div><div class="safety"><b>⚠ 안전 안내</b><br><span id="safetyText"></span></div><button id="completeWorkout" class="primary wide">운동 완료하기</button></div></div><div id="profileModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="demoProfileName"><div class="sheet"><button id="closeProfileModal" class="close" type="button" aria-label="프로필 닫기">×</button><span class="eyebrow">함께 · 시연용 프로필</span><h2 id="demoProfileName"></h2><p id="demoProfileIntro" class="tiny"></p><div id="demoProfileStats" class="profile-demo-stats"></div><h3>최근 운동 기록</h3><div id="demoProfileWorkouts" class="list"></div><p class="tiny">이 프로필과 운동 기록은 시연용 가상 데이터입니다. 실제 사용자 기록과 연결되지 않습니다.</p></div></div><div id="toast" class="toast"></div>
  </main>  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/supabase-config.js"></script>
   <script src="js/supabase-client.js"></script>
-  <script src="js/app.js?v=social-login-gate-1" data-workout-json="./data/workout-templates.json"></script>
+  <script src="js/app.js?v=social-profiles-1" data-workout-json="./data/workout-templates.json"></script>
   <script src="js/auth.js?v=social-login-gate-1"></script>
 </body></html>
+
 
 
