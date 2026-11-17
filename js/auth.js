@@ -56,9 +56,13 @@
   });
   if(client){
     client.auth.getSession().then(async({data,error})=>{
-      if(error){console.warn('세션 확인 실패',error.message);return}
+      if(error){console.warn('세션 확인 실패',error.message);$('#loginScreen')?.classList.remove('hidden');return}
       if(data.session?.user){setAccount(data.session.user);await getProfile(data.session.user);$('#loginScreen')?.classList.add('hidden');}
+      else $('#loginScreen')?.classList.remove('hidden');
     });
     client.auth.onAuthStateChange((_event,session)=>{setAccount(session?.user||null)});
-  }else setAccount(null);
+  }else{
+    setAccount(null);
+    $('#loginScreen')?.classList.remove('hidden');
+  }
 })();
