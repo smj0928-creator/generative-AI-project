@@ -3,10 +3,12 @@
   const $=s=>document.querySelector(s);
   const message=(text,isError=false)=>{const el=$('#authMessage');if(el){el.textContent=text;el.classList.toggle('auth-error',isError)}};
   const setAccount=(user)=>{
+    window.aiTrainerUser=user||null;
     const email=$('#accountEmail'),logout=$('#logoutButton'),loginButton=$('#loginAccountButton');
     if(email)email.textContent=user?.email||'게스트로 이용 중';
     if(logout)logout.hidden=!user;
     if(loginButton)loginButton.hidden=Boolean(user);
+    window.updateSocialAccess?.();
   };
   const enter=()=>$('#loginSkip')?.click();
   const getProfile=async(user)=>{
