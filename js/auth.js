@@ -12,7 +12,7 @@
     if(!client||!user)return;
     const {data,error}=await client.from('profiles').select('nickname').eq('id',user.id).maybeSingle();
     if(error){console.warn('프로필 조회 실패',error.message);return}
-    if(data?.nickname){const input=$('#nickname');if(input)input.value=data.nickname;const name=$('#myName');if(name)name.textContent=data.nickname;}
+    if(data?.nickname){const input=$('#nickname');if(input)input.value=data.nickname;const name=$('#myName');if(name)name.textContent=data.nickname;}else{const nickname=$('#nickname')?.value.trim()||'운동새싹';const {error:insertError}=await client.from('profiles').upsert({id:user.id,nickname});if(insertError)console.warn('기본 프로필 생성 실패',insertError.message);}
   };
   const saveProfile=async(user,nickname)=>{
     if(!client||!user)return;
@@ -41,7 +41,7 @@
     else message('가입 요청이 완료되었습니다. 이메일 인증 링크를 확인한 뒤 로그인해 주세요');
   };
   document.addEventListener('DOMContentLoaded',()=>{});
-  $('#loginNext')?.addEventListener('click',login);
+  if($('#loginNext'))$('#loginNext').onclick=login;
   $('#signupButton')?.addEventListener('click',signup);
   $('#authPassword')?.addEventListener('keydown',e=>{if(e.key==='Enter')login()});
   $('#logoutButton')?.addEventListener('click',async()=>{
