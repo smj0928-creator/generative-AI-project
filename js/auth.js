@@ -3,9 +3,10 @@
   const $=s=>document.querySelector(s);
   const message=(text,isError=false)=>{const el=$('#authMessage');if(el){el.textContent=text;el.classList.toggle('auth-error',isError)}};
   const setAccount=(user)=>{
-    const email=$('#accountEmail'),logout=$('#logoutButton');
+    const email=$('#accountEmail'),logout=$('#logoutButton'),loginButton=$('#loginAccountButton');
     if(email)email.textContent=user?.email||'게스트로 이용 중';
     if(logout)logout.hidden=!user;
+    if(loginButton)loginButton.hidden=Boolean(user);
   };
   const enter=()=>$('#loginSkip')?.click();
   const getProfile=async(user)=>{
@@ -44,6 +45,7 @@
   if($('#loginNext'))$('#loginNext').onclick=login;
   $('#signupButton')?.addEventListener('click',signup);
   $('#authPassword')?.addEventListener('keydown',e=>{if(e.key==='Enter')login()});
+  $('#loginAccountButton')?.addEventListener('click',()=>$('#loginScreen').classList.remove('hidden'));
   $('#logoutButton')?.addEventListener('click',async()=>{
     if(!client)return;const {error}=await client.auth.signOut();if(error){message('로그아웃 실패: '+error.message,true);return}setAccount(null);$('#loginScreen').classList.remove('hidden');message('로그아웃했습니다');
   });
