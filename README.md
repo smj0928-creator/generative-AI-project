@@ -6,7 +6,11 @@
 
 AI트레이너는 사용자의 운동 목표와 수준, 주당 운동 횟수, 1회 운동 시간, 운동 장소 및 운동 방식에 맞춰 주간 운동 계획을 확인하고 운동 진행 상황을 관리하는 모바일 웹 프로젝트입니다
 
-현재 운동 계획은 실제 생성형 AI가 아니라 `data/workout-templates.json`에 저장된 운동 템플릿과 JavaScript 규칙을 이용해 생성합니다. Supabase 로그인·회원가입과 프로필 저장 코드가 추가됐으며, 운동 계획과 완료 기록은 여전히 브라우저 `localStorage`에 저장됩니다. 계정 간 운동 기록 동기화는 아직 제공하지 않습니다.
+현재 운동 계획은 실제 생성형 AI가 아니라 운동 템플릿과 JavaScript 규칙을 이용해 생성합니다. Supabase에 운동 데이터를 등록하면 이를 우선 불러오며, 등록 전이나 조회 실패 시 `data/workout-templates.json`을 사용합니다. 로그인 사용자의 플랜과 완료 기록은 Supabase 동기화를 시도하고 브라우저에도 저장합니다.
+
+### Supabase 운동 데이터 등록
+
+`supabase/app-data.sql`을 Supabase 프로젝트 `ai-health-trainer`의 SQL Editor에서 실행합니다. 이 파일은 운동 템플릿 32개, 운동 가이드 48개, 공개 트레이너·루틴, 개인 플랜·운동 기록 테이블과 접근 정책을 포함합니다. 실행 후 `workout_templates`, `exercise_guides`, `trainer_profiles`, `public_routines`에 데이터가 표시되는지 확인합니다. SQL 실행 전에는 앱이 기존 JSON을 사용합니다. 데이터에 포함된 트레이너와 활동 기록은 시연용 가상 정보입니다.
 
 ---
 

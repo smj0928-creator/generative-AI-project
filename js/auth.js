@@ -9,6 +9,7 @@
     if(logout)logout.hidden=!user;
     if(loginButton)loginButton.hidden=Boolean(user);
     window.updateSocialAccess?.();
+    window.onAiTrainerAuthChanged?.(user||null);
   };
   const enter=()=>$('#loginSkip')?.click();
   const getProfile=async(user)=>{
