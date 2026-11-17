@@ -13,14 +13,13 @@
   };
   const enter=()=>$('#loginSkip')?.click();
   const getProfile=async(user)=>{
-    if(!client||!user)return;
-    const {data,error}=await client.from('profiles').select('nickname').eq('id',user.id).maybeSingle();
-    if(error){console.warn('프로필 조회 실패',error.message);return}
-    if(data?.nickname){const input=$('#nickname');if(input)input.value=data.nickname;const name=$('#myName');if(name)name.textContent=data.nickname;}else{const nickname=$('#nickname')?.value.trim()||'운동새싹';const {error:insertError}=await client.from('profiles').upsert({id:user.id,nickname});if(insertError)console.warn('기본 프로필 생성 실패',insertError.message);}
+    if(!user)return;
+    const nickname=user.user_metadata?.nickname;
+    if(nickname)window.applyAiTrainerNickname?.(nickname);
   };
   const saveProfile=async(user,nickname)=>{
     if(!client||!user)return;
-    const {error}=await client.from('profiles').upsert({id:user.id,nickname,updated_at:new Date().toISOString()});
+    const {error}=await client.auth.updateUser({data:{nickname}});
     if(error)message('닉네임은 이 기기에 저장했지만 서버 저장은 실패했습니다: '+error.message,true);
   };
   const login=async()=>{
@@ -52,7 +51,6 @@
   $('#logoutButton')?.addEventListener('click',async()=>{
     if(!client)return;const {error}=await client.auth.signOut();if(error){message('로그아웃 실패: '+error.message,true);return}setAccount(null);$('#loginScreen').classList.remove('hidden');message('로그아웃했습니다');
   });
-  const originalSave=$('#saveProfile')?.onclick;
   $('#saveProfile')?.addEventListener('click',async()=>{
     const {data}=client?await client.auth.getUser():{data:{user:null}};
     if(data?.user)await saveProfile(data.user,$('#nickname').value.trim()||'운동새싹');

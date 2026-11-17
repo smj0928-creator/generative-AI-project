@@ -121,6 +121,12 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')$('#profileModal').c
 function toast(msg){const t=$('#toast');t.textContent=msg;t.classList.add('show');clearTimeout(t._id);t._id=setTimeout(()=>t.classList.remove('show'),2200)}
 function updateSocialAccess(){const signedIn=Boolean(window.aiTrainerUser);$('#socialGuest').hidden=signedIn;$('#socialMemberContent').hidden=!signedIn;if(signedIn&&$('#social').classList.contains('active')&&!state.socialVisited){state.socialVisited=true;save();renderBadges()}}
 window.updateSocialAccess=updateSocialAccess;
+window.applyAiTrainerNickname=nickname=>{
+ state.name=nickname;
+ $('#nickname').value=nickname;
+ localStorage.setItem(KEY,JSON.stringify(state));
+ render();
+};
 window.onAiTrainerAuthChanged=async user=>{
  if(!user)return;
  const remoteState=await window.aiTrainerData?.loadUserState?.();
