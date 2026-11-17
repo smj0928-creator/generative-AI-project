@@ -103,5 +103,11 @@
     };
   }
 
-  window.aiTrainerData={loadCatalog,syncState,loadUserState};
+  async function removeWorkoutLog(itemId){
+    if(!client||!window.aiTrainerUser)return;
+    const {error}=await client.from('workout_logs').delete().eq('user_id',window.aiTrainerUser.id).eq('workout_item_id',String(itemId));
+    if(error)console.warn('Supabase 운동 기록 취소 실패',error.message);
+  }
+
+  window.aiTrainerData={loadCatalog,syncState,loadUserState,removeWorkoutLog};
 })();
