@@ -732,9 +732,9 @@ with catalog as (
   }
 }$__CATALOG__$::jsonb as data
 ), goals as (
-  select key as goal,value as items from catalog,cross join lateral jsonb_each(data-'_exerciseGuides')
+  select key as goal,value as items from catalog cross join lateral jsonb_each(data-'_exerciseGuides')
 ), expanded as (
-  select goal,item,row_number() over(partition by goal) as sort_order from goals,cross join lateral jsonb_array_elements(items) as item
+  select goal,item,row_number() over(partition by goal) as sort_order from goals cross join lateral jsonb_array_elements(items) as item
 )
 insert into public.workout_templates(goal,title,summary,place,workout_type,sort_order,is_active)
 select goal,item->>'title',item->>'summary',item->>'place',item->>'workoutType',sort_order,true from expanded
@@ -1343,7 +1343,7 @@ with catalog as (
   }
 }$__CATALOG__$::jsonb as data
 ), guides as (
-  select key as exercise_name,value as guide from catalog,cross join lateral jsonb_each(data->'_exerciseGuides')
+  select key as exercise_name,value as guide from catalog cross join lateral jsonb_each(data->'_exerciseGuides')
 )
 insert into public.exercise_guides(exercise_name,media_type,media_url,source_title,source_url,source_name,author,license_name,license_url,ai_generated,format_note,pending_reason,updated_at)
 select exercise_name,coalesce(guide->>'type','pending'),guide->>'url',guide->>'sourceTitle',guide->>'sourceUrl',guide->>'sourceName',guide->>'author',guide->>'license',guide->>'licenseUrl',coalesce((guide->>'aiGenerated')::boolean,false),guide->>'formatNote',guide->>'reason',now() from guides
