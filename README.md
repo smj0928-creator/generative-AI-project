@@ -224,3 +224,12 @@ generative-AI-project/
 - 리그 순위, 공개 트레이너 및 친구 매칭은 실제 사용자가 연결된 기능이 아니라 시연용 데이터입니다
 - v0.4의 설정 및 마이페이지 개편은 요구사항으로 정리된 상태이며 실제 코드 반영 여부를 확인한 뒤 완료로 변경해야 합니다
 - 발표에서는 구현 완료 기능과 향후 개발 예정 기능을 구분해 설명합니다
+
+## 이전 버전 직접 시연
+
+- [v0.1 초기 프로토타입](https://smj0928-creator.github.io/generative-AI-project/versions/v0.1/) — 당시 실행 파일과 데이터 보존
+- [v0.1 와이어프레임](https://smj0928-creator.github.io/generative-AI-project/wireframes/wireframe-v0.1.html)
+- [v0.2 와이어프레임](https://smj0928-creator.github.io/generative-AI-project/wireframes/wireframe-v0.2.html)
+- [현재 프로토타입](https://smj0928-creator.github.io/generative-AI-project/)
+
+두 프로토타입은 같은 사이트의 브라우저 저장 공간을 공유할 수 있으므로 시연 전 기록을 확인합니다.
