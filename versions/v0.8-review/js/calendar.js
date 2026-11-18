@@ -19,7 +19,7 @@
     const entries=(Array.isArray(state.activityHistory)?state.activityHistory:[]).filter(x=>x.completedAt&&!Number.isNaN(Date.parse(x.completedAt)));
     const grouped=new Map();for(const item of entries){const key=dayKey(item.completedAt);grouped.set(key,[...(grouped.get(key)||[]),item])}
     const count=state.streak||0;$('#calendarStreak').textContent=count;
-    $('#calendarIntro').textContent=count?'쉬는 날도 회복의 일부예요. 무리하지 말고 이어가요.':'첫 운동을 완료하면 달력에 표시돼요.';
+    $('#calendarIntro').textContent=count?'쉬는 날도 회복의 일부예요. 무리하지 말고 이어가요.':state.completed?.length&&!entries.length?`이전 완료 ${state.completed.length}회는 날짜가 없어 달력에 표시되지 않아요.`:'첫 운동을 완료하면 달력에 표시돼요.';
     const year=month.getFullYear(),index=month.getMonth(),days=new Date(year,index+1,0).getDate();
     $('#calendarMonth').textContent=`${year}년 ${index+1}월`;
     const monthPrefix=`${year}-${String(index+1).padStart(2,'0')}-`;
@@ -35,7 +35,7 @@
       button.textContent=String(n);button.setAttribute('aria-label',`${index+1}월 ${n}일, 운동 ${items.length}회`);
       button.onclick=()=>{selectedDay=key;showDetail(key,grouped);render(currentState)};grid.append(button);
     }
-    showDetail(selectedDay||today,grouped);
+    showDetail(selectedDay||(today.startsWith(monthPrefix)?today:monthPrefix+'01'),grouped);
   }
   function showDetail(key,grouped){const items=grouped.get(key)||[];const date=key?.split('-')||[];$('#calendarDayDetail').textContent=items.length?`${Number(date[1])}월 ${Number(date[2])}일 · ${items.length}회 완료 · ${items.map(x=>x.title||'운동').join(', ')}`:`${Number(date[1])}월 ${Number(date[2])}일 · 완료한 운동이 없어요.`}
   $('#calendarPrev').onclick=()=>{month=new Date(month.getFullYear(),month.getMonth()-1,1);selectedDay=null;render(currentState)};

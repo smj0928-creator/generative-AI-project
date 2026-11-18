@@ -116,9 +116,10 @@
   }
 
   async function clearWorkoutLogs(){
-    if(!client||!window.aiTrainerUser)return;
+    if(!client||!window.aiTrainerUser)return true;
     const {error}=await client.from('workout_logs').delete().eq('user_id',window.aiTrainerUser.id);
-    if(error)console.warn('Supabase 운동 기록 초기화 실패',error.message);
+    if(error){console.warn('Supabase 운동 기록 초기화 실패',error.message);return false}
+    return true;
   }
   window.aiTrainerData={loadCatalog,syncState,loadUserState,recordWorkoutLog,removeWorkoutLog,clearWorkoutLogs};
 })();
