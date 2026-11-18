@@ -62,23 +62,20 @@
       caution:state.caution||'',
       plan_items:state.plan||[],
       completed_item_ids:state.completed||[],
-      app_state:{checks:state.checks||{},streak:state.streak||0,socialVisited:Boolean(state.socialVisited),copiedRoutine:Boolean(state.copiedRoutine)},
+      app_state:{checks:state.checks||{},streak:state.streak||0,socialVisited:Boolean(state.socialVisited),copiedRoutine:Boolean(state.copiedRoutine),activityHistory:state.activityHistory||[]},
       updated_at:new Date().toISOString()
     };
     const {error}=await client.from('user_plans').upsert(payload,{onConflict:'user_id'});
     if(error){console.warn('Supabase 플랜 동기화 실패',error.message);return}
-    const completed=new Set((state.completed||[]).map(String));
-    const logs=(state.plan||[]).filter(item=>completed.has(String(item.id))).map(item=>({
-      user_id:userId,
-      workout_item_id:String(item.id),
-      title:item.title,
-      duration:item.duration,
-      completed_at:new Date().toISOString()
-    }));
-    if(logs.length){
-      const {error:insertError}=await client.from('workout_logs').upsert(logs,{onConflict:'user_id,workout_item_id'});
-      if(insertError)console.warn('Supabase 운동 기록 저장 실패',insertError.message);
-    }
+  }
+
+  async function recordWorkoutLog(item,completedAt){
+    if(!client||!window.aiTrainerUser)return;
+    const {error}=await client.from('workout_logs').upsert({
+      user_id:window.aiTrainerUser.id,workout_item_id:String(item.id),title:item.title,
+      duration:item.duration,completed_at:completedAt
+    },{onConflict:'user_id,workout_item_id'});
+    if(error)console.warn('Supabase 운동 기록 저장 실패',error.message);
   }
 
   async function loadUserState(){
@@ -86,6 +83,14 @@
     const {data,error}=await client.from('user_plans').select('*').eq('user_id',window.aiTrainerUser.id).maybeSingle();
     if(error){console.warn('Supabase 플랜 조회 실패',error.message);return null}
     if(!data)return null;
+    const {data:logs, error:logError}=await client.from('workout_logs')
+      .select('workout_item_id,title,duration,completed_at').eq('user_id',window.aiTrainerUser.id);
+    if(logError)console.warn('Supabase 운동 날짜 조회 실패',logError.message);
+    const savedHistory=Array.isArray(data.app_state?.activityHistory)?data.app_state.activityHistory:[];
+    const history=new Map((logs||[]).map(log=>[String(log.workout_item_id),{
+      itemId:String(log.workout_item_id),title:log.title,duration:log.duration,completedAt:log.completed_at
+    }]));
+    savedHistory.forEach(item=>history.set(String(item.itemId),item));
     return {
       goal:data.goal,
       level:data.level,
@@ -96,6 +101,7 @@
       caution:data.caution||'',
       plan:data.plan_items||[],
       completed:data.completed_item_ids||[],
+      activityHistory:[...history.values()],
       checks:data.app_state?.checks||{},
       streak:data.app_state?.streak||0,
       socialVisited:Boolean(data.app_state?.socialVisited),
@@ -109,5 +115,11 @@
     if(error)console.warn('Supabase 운동 기록 취소 실패',error.message);
   }
 
-  window.aiTrainerData={loadCatalog,syncState,loadUserState,removeWorkoutLog};
+  async function clearWorkoutLogs(){
+    if(!client||!window.aiTrainerUser)return true;
+    const {error}=await client.from('workout_logs').delete().eq('user_id',window.aiTrainerUser.id);
+    if(error){console.warn('Supabase 운동 기록 초기화 실패',error.message);return false}
+    return true;
+  }
+  window.aiTrainerData={loadCatalog,syncState,loadUserState,recordWorkoutLog,removeWorkoutLog,clearWorkoutLogs};
 })();
