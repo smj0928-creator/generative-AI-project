@@ -6,7 +6,7 @@
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body><main class="shell">
-  <section id="loginScreen" class="login-screen hidden" aria-label="로그인"><div class="login-brand"><b>AI</b>트레이너</div><div class="login-visual"><span>🏃</span></div><div class="login-copy"><span class="eyebrow">나를 위한 운동 파트너</span><h1>운동 목표를 정하고<br>오늘부터 시작해요</h1><p>목표·수준·시간·장소에 맞는 주간 운동 계획을 확인하세요.</p></div><div class="login-form"><label class="tiny" for="authEmail">이메일</label><input id="authEmail" class="auth-input" type="email" placeholder="이메일 주소" autocomplete="email"><label class="tiny" for="authPassword">비밀번호</label><input id="authPassword" class="auth-input" type="password" placeholder="비밀번호 (6자 이상)" autocomplete="current-password"><button id="loginNext" class="primary wide">로그인</button><button id="signupButton" class="secondary wide auth-secondary">회원가입</button><button id="loginSkip" class="login-skip">로그인 없이 둘러보기</button><p id="authMessage" class="login-hint" role="status">로그인하면 계획과 완료 기록을 계정에 저장할 수 있어요.</p></div></section>
+  <section id="loginScreen" class="login-screen hidden" aria-label="로그인"><div class="login-brand"><b>AI</b>트레이너</div><div class="login-visual"><span>🏃</span></div><div class="login-copy"><span class="eyebrow">나를 위한 운동 파트너</span><h1>운동 목표를 정하고<br>오늘부터 시작해요</h1><p>목표·수준·시간·장소에 맞는 주간 운동 계획을 확인하세요.</p></div><div class="login-form"><label class="tiny" for="authEmail">이메일</label><input id="authEmail" class="auth-input" type="email" placeholder="이메일 주소" autocomplete="email" aria-describedby="authEmailError"><p id="authEmailError" class="auth-field-error" role="alert" hidden></p><label class="tiny" for="authPassword">비밀번호</label><input id="authPassword" class="auth-input" type="password" placeholder="비밀번호 (6자 이상)" autocomplete="current-password" aria-describedby="authPasswordError"><p id="authPasswordError" class="auth-field-error" role="alert" hidden></p><button id="loginNext" class="primary wide">로그인</button><button id="signupButton" class="secondary wide auth-secondary">회원가입</button><button id="loginSkip" class="login-skip">로그인 없이 둘러보기</button><p id="authMessage" class="login-hint" role="status">로그인하면 계획과 완료 기록을 계정에 저장할 수 있어요.</p></div></section>
   <div class="app"><header class="top"><div class="logo"><b>AI</b>트레이너 <small style="font-size:10px;color:#6558f5">v0.8 검토본</small></div><button class="avatar" data-go="mypage" aria-label="마이페이지">나</button></header>
     <section id="home" class="page active">
       <div class="hero"><span class="eyebrow" style="color:#dcd7ff">오늘도 한 걸음</span><h1 id="hello">안녕하세요, 운동 준비됐나요?</h1><p>목표와 시간에 맞는 주간 운동 계획을 만들어 보세요.</p><p>쉬는 날도 운동의 일부예요. 통증이 있으면 쉬어 주세요.</p></div>
@@ -27,7 +27,7 @@
   <script src="js/supabase-client.js"></script>
   <script src="js/supabase-data.js?v=app-data-2"></script>
   <script src="js/app.js?v=v08-draft-1" data-workout-json="./data/workout-templates.json"></script>
-  <script src="js/auth.js?v=supabase-sync-2"></script>
+  <script src="js/auth.js?v=v08-review-auth-2"></script>
 </body></html>
 
 
