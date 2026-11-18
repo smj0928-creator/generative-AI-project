@@ -1,6 +1,8 @@
 # AI트레이너 · 생성형 AI 기반 맞춤 운동 트레이너
 
 **현재 프로젝트 버전: v0.7**
+**v0.8 검토본: [시연하기](versions/v0.8-review/index.html) · [변경 내용](versions/v0.8-review/README.md)** — 사용자 검토 전이며 최종 버전으로 확정되지 않았습니다.
+**v0.7 보존본: [시연하기](versions/v0.7/index.html)**
 **프로젝트 형태: 모바일 화면 중심의 웹 프로토타입**  
 **저장소: [smj0928-creator/generative-AI-project](https://github.com/smj0928-creator/generative-AI-project)**
 
