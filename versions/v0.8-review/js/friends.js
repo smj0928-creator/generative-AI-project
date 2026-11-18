@@ -19,7 +19,7 @@
   async function ensureProfile(user){
     const {data,error}=await client.from('friend_profiles').select('user_id,nickname,invite_code').eq('user_id',user.id).maybeSingle();
     if(error)throw error;if(data)return data;
-    const nickname=(user.user_metadata?.nickname||'운동새싹').slice(0,12);
+    const nickname=(user.user_metadata?.nickname||document.querySelector('#nickname')?.value.trim()||'운동새싹').slice(0,12);
     const created=await client.from('friend_profiles').insert({user_id:user.id,nickname}).select('user_id,nickname,invite_code').single();
     if(created.error)throw created.error;return created.data;
   }
