@@ -14,6 +14,8 @@
 | 이전 v0.7 비교 | [v0.7 실행본](https://smj0928-creator.github.io/generative-AI-project/versions/v0.7/) |
 | 확정 v0.8 보존본 | [v0.8 실행본](https://smj0928-creator.github.io/generative-AI-project/versions/v0.8/) |
 | 요구사항과 검증 기준 | [버전별 PRD](markdown/prd.md#v08--운동-달력과-친구-초대) |
+| 사용자 흐름 QA | [v0.8 QA 테스트 케이스](markdown/qa-v0.8.md) |
+| 다음 버전 검토 | [v0.9 Gemini 연동 초안](markdown/prd.md#v09--gemini-주간-계획-생성-초안) |
 | 초기 설계 비교 | [v0.1 와이어프레임](wireframes/wireframe-v0.1.html) · [v0.2 와이어프레임](wireframes/wireframe-v0.2.html) |
 
 ## 프로젝트 변경 이력
@@ -28,6 +30,7 @@
 | v0.6 | 2026-11-17 | 로그인 회원에게 시연용 회원 프로필·최근 운동 기록 표시 | 실행본 보존 |
 | v0.7 | 2026-11-18 | 공개 운동 자료 86건을 Supabase에 등록하고 회원 계획·완료 기록 동기화 | [이전 실행본](versions/v0.7/) |
 | **v0.8** | **2026-11-18** | **화면 역할 정리, 안전·로그인 안내 개선, 운동 날짜 달력, 친구 초대·요청·수락 기능 추가** | **현재 배포본** |
+| v0.9 초안 | 2026-11-24 | Gemini 서버 함수로 계획 생성, 검증된 운동 목록 제한, 대체 계획 표시 | 개발 중 · 배포/실제 API 검증 전 |
 
 v0.1의 발표 기준은 **와이어프레임 초안**입니다. `versions/v0.1/`은 당시 화면을 비교하기 위해 따로 보존한 초기 프로토타입입니다. 이후 버전은 이전 버전의 산출물을 덮어쓰지 않고 비교할 수 있게 보존합니다.
 
@@ -76,3 +79,16 @@ wireframes/                 와이어프레임 버전별 자료
 - **향후 개발:** 생성형 AI 계획 생성, 메모·주의 부위의 실제 추천 반영, 실제 사용자 기반 리그와 실시간 알림, 운동 가이드 미디어 검증.
 
 운동 서비스의 안전 안내는 끌 수 없습니다. 현재 프로토타입은 의료 판단이나 개인별 운동 처방을 제공하지 않습니다.
+
+## v0.9 Gemini 연동 배포 준비
+
+v0.9 코드는 별도 작업 브랜치에서 검토 중입니다. **현재 GitHub Pages의 v0.8은 규칙 기반**이며, Gemini 호출 성공 사례를 아직 확인하지 않았습니다. v0.9의 AI는 새 동작을 만들어 내지 않고 Supabase에 등록된 운동 템플릿 ID만 선택합니다. 서버가 목표·장소·방식·주의 메모에 맞는 후보를 추린 뒤 AI 응답을 재검증합니다. AI 응답이 잘못되거나 연결에 실패하면 화면에 **대체 계획**이라고 표시합니다.
+
+배포 순서는 다음과 같습니다.
+
+1. Supabase `ai-health-trainer`의 SQL Editor에서 [`supabase/v09-ai-plan.sql`](supabase/v09-ai-plan.sql)을 적용합니다. 이 SQL은 AI 호출 횟수 제한용 테이블과 서버 전용 함수를 추가하며 기존 계획·운동 기록은 삭제하지 않습니다.
+2. Supabase Edge Functions의 Secrets에 `GEMINI_API_KEY`를 등록합니다. 키는 대화, 저장소, 정적 페이지에 넣지 않습니다. 기본 모델은 `gemini-2.5-flash`이고 다른 모델을 쓸 때만 `GEMINI_MODEL`을 설정합니다. Gemini 프로젝트에서 사용량 및 과금 한도를 확인합니다.
+3. [`supabase/functions/generate-plan`](supabase/functions/generate-plan/)을 `generate-plan` 함수로 배포합니다. [`supabase/config.toml`](supabase/config.toml)의 `verify_jwt = false` 설정을 함께 적용해 비회원도 계획을 만들 수 있게 합니다. 함수 자체가 공개 출처와 Supabase 공개 키를 확인하고, IP별 하루 10회 한도를 적용합니다.
+4. 실제 Gemini 응답으로 목표·장소·방식·횟수·시간을 바꿔 계획을 생성합니다. 운동 상세, 완료, 달력 및 로그인 계정 저장까지 확인한 뒤 루트 실행본을 v0.9로 배포하고 이 문서의 현재 버전을 갱신합니다.
+
+AI 입력으로 운동 조건과 참고 메모가 Gemini에 전송됩니다. 질환명·개인정보는 입력하지 않도록 안내하고, 의료 관련 메모는 자동 계획을 중단합니다. 이 기능은 의료 처방이 아닙니다.

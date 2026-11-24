@@ -1,5 +1,5 @@
 const KEY='ai-trainer-demo-v1';
-const defaultState={name:'운동새싹',goal:'체력 향상',level:'입문',frequency:3,duration:20,place:'home',workoutType:'bodyweight',caution:'',plan:[],completed:[],activityHistory:[],checks:{water:false,towel:false,space:false},streak:0,loginSeen:false,socialVisited:false,copiedRoutine:false};
+const defaultState={name:'운동새싹',goal:'체력 향상',level:'입문',frequency:3,duration:20,place:'home',workoutType:'bodyweight',caution:'',plan:[],planSource:'none',completed:[],activityHistory:[],checks:{water:false,towel:false,space:false},streak:0,loginSeen:false,socialVisited:false,copiedRoutine:false};
 let state={...defaultState,...JSON.parse(localStorage.getItem(KEY)||'{}')};let selected=0;
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 let exerciseGuides={};
@@ -37,8 +37,31 @@ const templatesReady=loadWorkoutTemplates();
 const save=()=>{localStorage.setItem(KEY,JSON.stringify(state));window.aiTrainerData?.syncState?.(state)};
 const activityDay=value=>new Date(value).toLocaleDateString('sv-SE',{timeZone:'Asia/Seoul'});
 function dailyStreak(){const dates=new Set((Array.isArray(state.activityHistory)?state.activityHistory:[]).filter(x=>x.completedAt).map(x=>activityDay(x.completedAt)));let day=new Date(),count=0;if(!dates.has(activityDay(day)))day.setDate(day.getDate()-1);while(dates.has(activityDay(day))){count++;day.setDate(day.getDate()-1)}return count}
-async function makePlan(){await templatesReady;const goal=$('#goal').value,level=$('#level').value,frequency=+$('#frequency').value,duration=+$('#duration').value,place=$('#place').value,workoutType=$('#workoutType').value,caution=$('#caution').value.trim();const set=(templates[goal]||[]).filter(item=>item.place===place&&item.workoutType===workoutType);if(!set.length){toast('선택한 조건에 맞는 운동 데이터가 없습니다');return}if(state.plan.length&&!confirm('이번 주 계획을 새로 만들까요? 현재 계획과 화면의 완료 상태가 바뀝니다.'))return;Object.assign(state,{goal,level,frequency,duration,place,workoutType,caution});state.plan=Array.from({length:frequency},(_,i)=>{const item=set[i%set.length];return{id:Date.now()+i,day:['월','화','수','목','금','토','일'][(i*Math.floor(7/frequency))%7],title:item.title,summary:item.summary,duration,level,place,workoutType}});state.completed=[];selected=0;save();render();toast('선택한 조건에 맞춰 주간 계획을 만들었어요');}
-function render(){const done=state.completed.length,total=state.plan.length,pct=total?Math.round(done/total*100):0;state.streak=dailyStreak();$('#hello').textContent=`안녕하세요, ${state.name}님!`;$('#planGoal').textContent=state.goal;$('#progressText').textContent=pct+'%';$('#progressBar').style.width=pct+'%';$('#myWorkoutCount').textContent=done+'회';$('#myWorkoutTime').textContent=(done*state.duration)+'분';$('#myStreak').textContent=state.streak+'일';$('#myName').textContent=state.name;renderHomeNext();renderPlan();renderBadges();renderChecklist();renderSocial();decorateSocialProfiles();window.aiTrainerCalendar?.render(state);}
+async function makePlan(){
+ await templatesReady;
+ const input={goal:$('#goal').value,level:$('#level').value,frequency:+$('#frequency').value,duration:+$('#duration').value,place:$('#place').value,workoutType:$('#workoutType').value,caution:$('#caution').value.trim()};
+ if(state.plan.length&&!confirm('이번 주 계획을 새로 만들까요? 현재 계획과 화면의 완료 상태가 바뀝니다.'))return;
+ const button=$('#planForm button.primary'),status=$('#aiPlanStatus');
+ button.disabled=true;status.textContent='Gemini가 계획을 구성하고 있어요…';
+ try{
+  let result;
+  try{result=await window.aiTrainerAI.generatePlan(input)}
+  catch(error){
+   if(error.code==='MEDICAL_NOTE'){status.textContent='질환·수술·통증 관련 메모는 자동 계획에 사용하지 않습니다. 전문가에게 먼저 상담해 주세요.';toast('안전을 위해 계획을 만들지 않았어요');return}
+   if(error.code==='NO_SAFE_CANDIDATES'){status.textContent='입력한 주의사항에 맞는 검토된 운동 자료가 없습니다.';toast('안전한 운동 자료를 찾지 못했어요');return}
+   if(error.code==='DAILY_LIMIT'){status.textContent='오늘의 AI 계획 생성 횟수를 모두 사용했어요. 내일 다시 시도해 주세요.';toast('오늘의 AI 사용 횟수를 모두 사용했어요');return}
+   if(input.caution){status.textContent='AI 연결이 안 되어 참고 메모를 검토할 수 없습니다. 잠시 후 다시 시도해 주세요.';toast('계획을 만들지 않았어요');return}
+   const set=(templates[input.goal]||[]).filter(item=>item.place===input.place&&item.workoutType===input.workoutType);
+   if(!set.length){status.textContent='선택한 조건에 맞는 운동 데이터가 없습니다.';toast(status.textContent);return}
+   result={source:'fallback',plan:Array.from({length:input.frequency},(_,i)=>{const item=set[i%set.length];return{id:Date.now()+i,day:['월','화','수','목','금','토','일'][(i*Math.floor(7/input.frequency))%7],title:item.title,summary:item.summary,duration:input.duration,level:input.level,place:input.place,workoutType:input.workoutType}})};
+  }
+  Object.assign(state,input);
+  state.plan=result.plan;state.planSource=result.source;state.completed=[];selected=0;save();render();
+  status.textContent=result.source==='gemini'?'Gemini가 검토된 운동 자료로 계획을 구성했습니다.':'AI를 사용할 수 없어 검토된 자료로 대체 계획을 만들었습니다.';
+  toast(result.source==='gemini'?'AI 주간 계획을 만들었어요':'대체 계획을 만들었어요');
+ }finally{button.disabled=false}
+}
+function render(){const done=state.completed.length,total=state.plan.length,pct=total?Math.round(done/total*100):0;state.streak=dailyStreak();$('#hello').textContent=`안녕하세요, ${state.name}님!`;$('#planGoal').textContent=state.goal;$('#progressText').textContent=pct+'%';$('#progressBar').style.width=pct+'%';$('#myWorkoutCount').textContent=done+'회';$('#myWorkoutTime').textContent=(done*state.duration)+'분';$('#myStreak').textContent=state.streak+'일';$('#myName').textContent=state.name;$('#planSource').textContent=state.plan.length?state.planSource==='gemini'?'Gemini AI가 검토된 운동 자료에서 선택한 계획':state.planSource==='fallback'?'AI 연결 실패로 만든 대체 계획':state.planSource==='mixed'?'내 계획과 공개 루틴':'이전 버전에서 만든 계획':'';renderHomeNext();renderPlan();renderBadges();renderChecklist();renderSocial();decorateSocialProfiles();window.aiTrainerCalendar?.render(state);}
 function renderHomeNext(){const box=$('#homeNextWorkout');const next=state.plan.find(w=>!state.completed.includes(w.id));box.replaceChildren();if(!next){box.classList.add('empty');box.textContent=state.plan.length?'이번 주 계획을 모두 마쳤어요. 충분히 쉬어 주세요.':'계획을 만들면 다음 운동이 여기에 보여요.';return}box.classList.remove('empty');box.classList.add('workout');const icon=document.createElement('div');icon.className='workout-icon';icon.textContent='🏃';const info=document.createElement('div');info.className='workout-info';const heading=document.createElement('h3');heading.textContent=next.title;const detail=document.createElement('p');detail.textContent=`${next.day}요일 · ${next.duration}분 · ${next.level}`;info.append(heading,detail);const button=document.createElement('button');button.className='pill';button.textContent='보기';button.onclick=()=>openWorkout(state.plan.indexOf(next));box.append(icon,info,button);}
 function renderPlan(){const box=$('#planList');box.innerHTML=state.plan.length?state.plan.map((w,i)=>`<div class="card workout"><div class="workout-icon">${state.completed.includes(w.id)?'✅':['🏋️','🏃','🧘'][i%3]}</div><div class="workout-info"><span class="eyebrow">${w.day}요일 · ${w.duration}분 · ${w.place==='gym'?'헬스장':'홈트레이닝'} · ${w.workoutType==='bodyweight'?'맨몸':w.workoutType==='equipment'?'기구':'혼합'}</span><h3>${w.title}</h3><p>${w.summary}</p></div><button class="pill" data-plan-open="${i}">상세</button></div>`).join(''):'<div class="card empty">홈에서 주간 계획을 만들어 주세요.</div>';$$('[data-plan-open]').forEach(b=>b.onclick=()=>openWorkout(+b.dataset.planOpen));}
 function openWorkout(i){
@@ -90,7 +113,7 @@ function renderFeaturedRoutine(){
  $('#previewRoutine').onclick=()=>{const p=$('#routinePreview');p.classList.toggle('open');$('#previewRoutine').textContent=p.classList.contains('open')?'접기':'루틴 보기'};
  $('#copyRoutine').onclick=copyCreatorRoutine;
 }
-function copyCreatorRoutine(){const source=featuredRoutine;const routine={id:Date.now(),day:['월','화','수','목','금','토','일'][state.plan.length%7],title:source?.title||'민지핏의 30분 파워 루틴',summary:source?.summary||'스쿼트 · 니푸시업 · 리버스 런지 · 플랭크',duration:source?.duration||30,level:source?.level||'중급',place:source?.place||'home',workoutType:source?.workout_type||'bodyweight',sourceRoutineId:source?.id||null};state.plan.push(routine);state.copiedRoutine=true;save();render();toast('공개 루틴을 내 플랜에 담았어요')}
+function copyCreatorRoutine(){const source=featuredRoutine;const routine={id:Date.now(),day:['월','화','수','목','금','토','일'][state.plan.length%7],title:source?.title||'민지핏의 30분 파워 루틴',summary:source?.summary||'스쿼트 · 니푸시업 · 리버스 런지 · 플랭크',duration:source?.duration||30,level:source?.level||'중급',place:source?.place||'home',workoutType:source?.workout_type||'bodyweight',sourceRoutineId:source?.id||null};state.plan.push(routine);state.planSource='mixed';state.copiedRoutine=true;save();render();toast('공개 루틴을 내 플랜에 담았어요')}
 function decorateSocialProfiles(){
  renderFeaturedRoutine();
  $$('#myLeaderboard .rank, #upperLeaderboard .rank, #matchCard .match-top').forEach(row=>{

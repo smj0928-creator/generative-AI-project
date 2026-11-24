@@ -62,7 +62,7 @@
       caution:state.caution||'',
       plan_items:state.plan||[],
       completed_item_ids:state.completed||[],
-      app_state:{checks:state.checks||{},streak:state.streak||0,socialVisited:Boolean(state.socialVisited),copiedRoutine:Boolean(state.copiedRoutine),activityHistory:state.activityHistory||[]},
+      app_state:{checks:state.checks||{},streak:state.streak||0,socialVisited:Boolean(state.socialVisited),copiedRoutine:Boolean(state.copiedRoutine),activityHistory:state.activityHistory||[],planSource:state.planSource||'none'},
       updated_at:new Date().toISOString()
     };
     const {error}=await client.from('user_plans').upsert(payload,{onConflict:'user_id'});
@@ -105,7 +105,8 @@
       checks:data.app_state?.checks||{},
       streak:data.app_state?.streak||0,
       socialVisited:Boolean(data.app_state?.socialVisited),
-      copiedRoutine:Boolean(data.app_state?.copiedRoutine)
+      copiedRoutine:Boolean(data.app_state?.copiedRoutine),
+      planSource:data.app_state?.planSource||'legacy'
     };
   }
 
