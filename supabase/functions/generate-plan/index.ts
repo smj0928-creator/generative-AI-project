@@ -30,7 +30,10 @@ async function dbRequest(path: string, init: RequestInit, secret: string) {
     ...init,
     headers: { apikey: secret, 'Content-Type': 'application/json', ...init.headers }
   });
-  if (!response.ok) throw new Error('DATA_UNAVAILABLE');
+  if (!response.ok) {
+    console.error('generate-plan data request failed:', response.status);
+    throw new Error(`DATA_UNAVAILABLE_${response.status}`);
+  }
   return response.json();
 }
 
@@ -46,7 +49,7 @@ async function quotaAllowed(request: Request, secret: string) {
 }
 
 async function askGemini(input: ReturnType<typeof parsePlanInput>, candidates: Record<string, unknown>[], key: string) {
-  const model = Deno.env.get('GEMINI_MODEL') || 'gemini-2.5-flash';
+  const model = Deno.env.get('GEMINI_MODEL') || 'gemini-3.5-flash-lite';
   if (!/^[a-zA-Z0-9._-]+$/.test(model)) throw new Error('SERVER_CONFIG');
   const prompt = [
     '너는 운동 계획 편집 보조자다. 의료 진단이나 치료 조언을 하지 마라.',
@@ -74,7 +77,7 @@ async function askGemini(input: ReturnType<typeof parsePlanInput>, candidates: R
         }
       })
     });
-    if (!response.ok) throw new Error('MODEL_UNAVAILABLE');
+    if (!response.ok) throw new Error(`MODEL_UNAVAILABLE_${response.status}`);
     const result = await response.json();
     if (result.candidates?.[0]?.finishReason !== 'STOP') throw new Error('BAD_MODEL_OUTPUT');
     const text = result.candidates[0].content?.parts?.map((part: { text?: string }) => part.text || '').join('');
@@ -107,16 +110,21 @@ Deno.serve(async request => {
     const query = new URLSearchParams({ select: 'id,goal,title,summary,place,workout_type',
       is_active: 'eq.true', goal: `eq.${input.goal}`, place: `eq.${input.place}`,
       workout_type: `eq.${input.workoutType}`, order: 'sort_order.asc' });
-    const rows = await dbRequest(`workout_templates?${query}`, { method: 'GET' }, secret);
+    const rows = await dbRequest(`workout_templates?${query}`, { method: 'GET' }, publishable);
     const candidates = filterCatalog(rows, input);
     if (!candidates.length) return respond(422, { error: 'NO_SAFE_CANDIDATES' }, origin);
     if (!await quotaAllowed(request, secret)) return respond(429, { error: 'DAILY_LIMIT' }, origin);
     let source = 'gemini';
     let selected;
     try { selected = await askGemini(input, candidates, gemini); }
-    catch { selected = fallbackSelection(candidates, input.frequency); source = 'fallback'; }
+    catch (error) {
+      console.warn('generate-plan model fallback:', error instanceof Error ? error.message : 'unknown');
+      selected = fallbackSelection(candidates, input.frequency);
+      source = 'fallback';
+    }
     return respond(200, { source, plan: toPlanItems(selected, input, () => crypto.randomUUID()) }, origin);
-  } catch {
+  } catch (error) {
+    console.error('generate-plan backend error:', error instanceof Error ? error.message : 'unknown');
     return respond(503, { error: 'SERVICE_UNAVAILABLE' }, origin);
   }
 });
