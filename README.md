@@ -1,6 +1,6 @@
 # AI트레이너 · 모바일 운동 프로토타입
 
-**현재 버전: v0.9 (2026-11-25)** · [실행하기](https://smj0928-creator.github.io/generative-AI-project/) · [버전별 PRD](markdown/prd.md)
+**현재 버전: v0.9 (2026-11-25)** · [실행하기](https://smj0928-creator.github.io/generative-AI-project/?release=v09) · [버전별 PRD](markdown/prd.md)
 
 운동 목표, 수준, 횟수, 시간, 장소와 방식에 맞춰 주간 계획을 만들고 완료 날짜를 기록하는 모바일 웹 프로토타입입니다. 홈의 공개 트레이너 루틴은 로그인 없이 볼 수 있습니다. 계정으로 로그인하면 계획과 운동 기록을 Supabase에 저장하고 친구 초대 코드를 사용할 수 있습니다.
 
@@ -10,7 +10,7 @@
 
 | 목적 | 링크 |
 |---|---|
-| 최신 v0.9 시연 | [GitHub Pages](https://smj0928-creator.github.io/generative-AI-project/) |
+| 최신 v0.9 시연 | [GitHub Pages](https://smj0928-creator.github.io/generative-AI-project/?release=v09) |
 | 이전 v0.7 비교 | [v0.7 실행본](https://smj0928-creator.github.io/generative-AI-project/versions/v0.7/) |
 | 이전 v0.8 보존본 | [v0.8 실행본](https://smj0928-creator.github.io/generative-AI-project/versions/v0.8/) |
 | 요구사항과 검증 기준 | [버전별 PRD](markdown/prd.md#v08--운동-달력과-친구-초대) |
@@ -82,7 +82,7 @@ wireframes/                 와이어프레임 버전별 자료
 
 ## v0.9 Gemini 연동과 검증
 
-v0.9는 [GitHub Pages](https://smj0928-creator.github.io/generative-AI-project/)에 공개되어 있습니다. 이전 규칙 기반 v0.8은 [보존본](https://smj0928-creator.github.io/generative-AI-project/versions/v0.8/)에서 비교할 수 있습니다. v0.9의 AI는 새 동작을 만들어 내지 않고 Supabase에 등록된 운동 템플릿 ID만 선택합니다. 서버가 목표·장소·방식·주의 메모에 맞는 후보를 추린 뒤 AI 응답을 재검증합니다. AI 응답이 잘못되거나 연결에 실패하면 화면에 **대체 계획**이라고 표시합니다.
+v0.9는 [GitHub Pages](https://smj0928-creator.github.io/generative-AI-project/?release=v09)에 공개되어 있습니다. 이전 규칙 기반 v0.8은 [보존본](https://smj0928-creator.github.io/generative-AI-project/versions/v0.8/)에서 비교할 수 있습니다. v0.9의 AI는 새 동작을 만들어 내지 않고 Supabase에 등록된 운동 템플릿 ID만 선택합니다. 서버가 목표·장소·방식·주의 메모에 맞는 후보를 추린 뒤 AI 응답을 재검증합니다. AI 응답이 잘못되거나 연결에 실패하면 화면에 **대체 계획**이라고 표시합니다.
 
 2026-11-25 확인: `ai-health-trainer`에 호출 횟수 제한 SQL과 `generate-plan` Edge Function을 적용하고 Gemini 키를 서버 비밀 설정에 등록했습니다. Supabase 함수 테스트에서 HTTP 200과 `source: gemini`가 반환됐습니다. 로컬 v0.9 비회원 화면에서 계획 생성, 운동 가이드, 완료 기록, 달력 표시를 확인했습니다. 공개 GitHub Pages에서 v0.9 화면과 v0.8 보존본을 확인했고, 기존 로그인 계정의 기록이 표시되는 것도 확인했습니다. **공개 화면에서 새 회원 계획의 저장·재접속은 아직 검증 전입니다.**
 
