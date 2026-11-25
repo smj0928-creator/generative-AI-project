@@ -1,0 +1,2 @@
+[functions.generate-plan]
+verify_jwt = true
