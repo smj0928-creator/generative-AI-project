@@ -13,9 +13,9 @@
 | 최신 v0.9 시연 | [GitHub Pages](https://smj0928-creator.github.io/generative-AI-project/?release=v09) |
 | 이전 v0.7 비교 | [v0.7 실행본](https://smj0928-creator.github.io/generative-AI-project/versions/v0.7/) |
 | 이전 v0.8 보존본 | [v0.8 실행본](https://smj0928-creator.github.io/generative-AI-project/versions/v0.8/) |
-| 요구사항과 검증 기준 | [버전별 PRD](markdown/prd.md#v08--운동-달력과-친구-초대) |
+| 요구사항과 검증 기준 | [버전별 PRD](markdown/prd.md#v09--gemini-주간-계획-생성) |
 | 사용자 흐름 QA | [v0.8 QA 테스트 케이스](markdown/qa-v0.8.md) |
-| Gemini 연동 요구사항 | [v0.9 PRD](markdown/prd.md#v09--gemini-주간-계획-생성-초안) |
+| Gemini 연동 요구사항 | [v0.9 PRD](markdown/prd.md#v09--gemini-주간-계획-생성) |
 | 초기 설계 비교 | [v0.1 와이어프레임](wireframes/wireframe-v0.1.html) · [v0.2 와이어프레임](wireframes/wireframe-v0.2.html) |
 
 ## 프로젝트 변경 이력
