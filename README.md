@@ -1,21 +1,21 @@
 # AI트레이너 · 모바일 운동 프로토타입
 
-**현재 버전: v0.8 (2026-11-18)** · [실행하기](https://smj0928-creator.github.io/generative-AI-project/) · [버전별 PRD](markdown/prd.md)
+**현재 버전: v0.9 (2026-11-25)** · [실행하기](https://smj0928-creator.github.io/generative-AI-project/) · [버전별 PRD](markdown/prd.md)
 
 운동 목표, 수준, 횟수, 시간, 장소와 방식에 맞춰 주간 계획을 만들고 완료 날짜를 기록하는 모바일 웹 프로토타입입니다. 홈의 공개 트레이너 루틴은 로그인 없이 볼 수 있습니다. 계정으로 로그인하면 계획과 운동 기록을 Supabase에 저장하고 친구 초대 코드를 사용할 수 있습니다.
 
-> **현재 계획 생성은 규칙 기반입니다.** Supabase 운동 템플릿을 우선 읽고 실패하면 `data/workout-templates.json`을 사용합니다. 생성형 AI 모델 호출은 아직 구현하지 않았습니다. 공개 트레이너, 리그 순위와 시연용 회원 프로필은 가상 데이터입니다. 실제 친구 요청과 연속 운동 날짜는 로그인 계정의 Supabase 데이터를 사용합니다.
+> **현재 계획 생성은 Gemini API를 사용합니다.** Supabase 서버 함수가 검토된 운동 템플릿 중에서 계획을 선택하고, AI 호출에 실패하면 대체 계획임을 표시합니다. 공개 트레이너, 리그 순위와 시연용 회원 프로필은 가상 데이터입니다. 실제 친구 요청과 연속 운동 날짜는 로그인 계정의 Supabase 데이터를 사용합니다.
 
 ## 실행본과 문서
 
 | 목적 | 링크 |
 |---|---|
-| 최신 v0.8 시연 | [GitHub Pages](https://smj0928-creator.github.io/generative-AI-project/) |
+| 최신 v0.9 시연 | [GitHub Pages](https://smj0928-creator.github.io/generative-AI-project/) |
 | 이전 v0.7 비교 | [v0.7 실행본](https://smj0928-creator.github.io/generative-AI-project/versions/v0.7/) |
-| 확정 v0.8 보존본 | [v0.8 실행본](https://smj0928-creator.github.io/generative-AI-project/versions/v0.8/) |
+| 이전 v0.8 보존본 | [v0.8 실행본](https://smj0928-creator.github.io/generative-AI-project/versions/v0.8/) |
 | 요구사항과 검증 기준 | [버전별 PRD](markdown/prd.md#v08--운동-달력과-친구-초대) |
 | 사용자 흐름 QA | [v0.8 QA 테스트 케이스](markdown/qa-v0.8.md) |
-| 다음 버전 검토 | [v0.9 Gemini 연동 초안](markdown/prd.md#v09--gemini-주간-계획-생성-초안) |
+| Gemini 연동 요구사항 | [v0.9 PRD](markdown/prd.md#v09--gemini-주간-계획-생성-초안) |
 | 초기 설계 비교 | [v0.1 와이어프레임](wireframes/wireframe-v0.1.html) · [v0.2 와이어프레임](wireframes/wireframe-v0.2.html) |
 
 ## 프로젝트 변경 이력
@@ -29,8 +29,8 @@
 | v0.5 | 2026-11-17 | Supabase 로그인·회원가입 기반과 게스트의 함께 탭 접근 제한 | 실행본 보존 |
 | v0.6 | 2026-11-17 | 로그인 회원에게 시연용 회원 프로필·최근 운동 기록 표시 | 실행본 보존 |
 | v0.7 | 2026-11-18 | 공개 운동 자료 86건을 Supabase에 등록하고 회원 계획·완료 기록 동기화 | [이전 실행본](versions/v0.7/) |
-| **v0.8** | **2026-11-18** | **화면 역할 정리, 안전·로그인 안내 개선, 운동 날짜 달력, 친구 초대·요청·수락 기능 추가** | **현재 배포본** |
-| v0.9 검토본 | 2026-11-25 | Gemini 서버 함수로 계획 생성, 검증된 운동 목록 제한, 대체 계획 표시 | 실제 API·비회원 흐름 확인 · 공개 배포 전 |
+| v0.8 | 2026-11-18 | 화면 역할 정리, 안전·로그인 안내 개선, 운동 날짜 달력, 친구 초대·요청·수락 기능 추가 | [이전 실행본](versions/v0.8/) |
+| **v0.9** | **2026-11-25** | **Gemini 서버 함수로 계획 생성, 검증된 운동 목록 제한, 대체 계획 표시** | **현재 배포본** |
 
 v0.1의 발표 기준은 **와이어프레임 초안**입니다. `versions/v0.1/`은 당시 화면을 비교하기 위해 따로 보존한 초기 프로토타입입니다. 이후 버전은 이전 버전의 산출물을 덮어쓰지 않고 비교할 수 있게 보존합니다.
 
@@ -59,14 +59,14 @@ v0.1의 발표 기준은 **와이어프레임 초안**입니다. `versions/v0.1/
 - 정적 페이지에는 Supabase 공개 설정만 둡니다. 비밀 API 키나 데이터베이스 비밀번호를 저장소에 넣지 않습니다.
 
 ```text
-index.html                 최신 v0.8 실행 화면
+index.html                 최신 v0.9 실행 화면
 css/                       화면 스타일
 js/                        앱·로그인·달력·친구·Supabase 연동
 data/workout-templates.json  운동 자료 대체본
 supabase/                  데이터베이스 구조와 등록 SQL
 markdown/prd.md            버전별 요구사항과 검증 기준
 versions/v0.7/             이전 실행본
-versions/v0.8/             현재 버전 보존본
+versions/v0.8/             이전 v0.8 보존본
 versions/v0.8-review/      확정 전 검토본 기록
 wireframes/                 와이어프레임 버전별 자료
 ```
@@ -76,21 +76,22 @@ wireframes/                 와이어프레임 버전별 자료
 - **구현:** 회원 인증, 개인 계획·완료 기록 저장, 운동 날짜 달력, 친구 초대 코드와 요청·수락 데이터 구조 및 화면.
 - **시연용 데이터:** 공개 트레이너의 인증·팔로워 수, 리그 순위, 비슷한 운동 친구와 일부 타인 프로필·운동 기록.
 - **아직 검증 필요:** 서로 다른 두 계정으로 친구 요청·수락·삭제를 끝까지 시연하는 테스트, 신규 계정의 첫 회원가입, 다른 기기에서의 기록 복원.
-- **향후 개발:** 생성형 AI 계획 생성, 메모·주의 부위의 실제 추천 반영, 실제 사용자 기반 리그와 실시간 알림, 운동 가이드 미디어 검증.
+- **향후 개발:** 실제 사용자 기반 리그와 실시간 알림, 운동 가이드 미디어 검증.
 
 운동 서비스의 안전 안내는 끌 수 없습니다. 현재 프로토타입은 의료 판단이나 개인별 운동 처방을 제공하지 않습니다.
 
-## v0.9 Gemini 연동 배포 준비
+## v0.9 Gemini 연동과 검증
 
-v0.9 코드는 별도 작업 브랜치에서 검토 중입니다. **현재 GitHub Pages의 v0.8은 규칙 기반**입니다. v0.9의 AI는 새 동작을 만들어 내지 않고 Supabase에 등록된 운동 템플릿 ID만 선택합니다. 서버가 목표·장소·방식·주의 메모에 맞는 후보를 추린 뒤 AI 응답을 재검증합니다. AI 응답이 잘못되거나 연결에 실패하면 화면에 **대체 계획**이라고 표시합니다.
+v0.9는 [GitHub Pages](https://smj0928-creator.github.io/generative-AI-project/)에 공개되어 있습니다. 이전 규칙 기반 v0.8은 [보존본](https://smj0928-creator.github.io/generative-AI-project/versions/v0.8/)에서 비교할 수 있습니다. v0.9의 AI는 새 동작을 만들어 내지 않고 Supabase에 등록된 운동 템플릿 ID만 선택합니다. 서버가 목표·장소·방식·주의 메모에 맞는 후보를 추린 뒤 AI 응답을 재검증합니다. AI 응답이 잘못되거나 연결에 실패하면 화면에 **대체 계획**이라고 표시합니다.
 
-2026-11-25 확인: `ai-health-trainer`에 호출 횟수 제한 SQL과 `generate-plan` Edge Function을 적용하고 Gemini 키를 서버 비밀 설정에 등록했습니다. Supabase 함수 테스트에서 HTTP 200과 `source: gemini`가 반환됐습니다. 로컬 v0.9 비회원 화면에서 계획 생성, 운동 가이드, 완료 기록, 달력 표시를 확인했습니다. **회원 저장·재접속과 공개 GitHub Pages v0.9는 아직 검증 전입니다.**
+2026-11-25 확인: `ai-health-trainer`에 호출 횟수 제한 SQL과 `generate-plan` Edge Function을 적용하고 Gemini 키를 서버 비밀 설정에 등록했습니다. Supabase 함수 테스트에서 HTTP 200과 `source: gemini`가 반환됐습니다. 로컬 v0.9 비회원 화면에서 계획 생성, 운동 가이드, 완료 기록, 달력 표시를 확인했습니다. 공개 GitHub Pages에서 v0.9 화면과 v0.8 보존본을 확인했고, 기존 로그인 계정의 기록이 표시되는 것도 확인했습니다. **공개 화면에서 새 회원 계획의 저장·재접속은 아직 검증 전입니다.**
 
 배포 순서는 다음과 같습니다.
 
 1. Supabase `ai-health-trainer`의 SQL Editor에서 [`supabase/v09-ai-plan.sql`](supabase/v09-ai-plan.sql)을 적용합니다. **2026-11-24 실행 완료**. 이 SQL은 AI 호출 횟수 제한용 테이블과 서버 전용 함수를 추가하며 기존 계획·운동 기록은 삭제하지 않습니다.
 2. Supabase Edge Functions의 Secrets에 `GEMINI_API_KEY`를 등록합니다. **완료.** 키는 대화, 저장소, 정적 페이지에 넣지 않습니다. `GEMINI_MODEL`은 `gemini-3.5-flash-lite`로 설정했습니다. Gemini 프로젝트에서 사용량 및 과금 한도를 확인합니다.
 3. [`supabase/functions/generate-plan`](supabase/functions/generate-plan/)을 `generate-plan` 함수로 배포합니다. **완료.** 함수 자체가 공개 출처와 Supabase 공개 키를 확인하고, IP별 하루 10회 한도를 적용합니다. 브라우저에서 비회원 호출이 성공한 구성을 유지합니다.
-4. 실제 Gemini 응답과 비회원의 운동 상세·완료·달력은 확인했습니다. **남은 검증:** 로그인 계정 저장·재접속, 공개 주소에서의 호출. 확인 후 루트 실행본을 v0.9로 배포하고 이 문서의 현재 버전을 갱신합니다.
+4. 실제 Gemini 응답과 비회원의 운동 상세·완료·달력, 공개 주소의 v0.9 화면을 확인했습니다. **남은 검증:** 새 로그인 계정 계획의 저장·재접속과 공개 주소에서 신규 계획 생성.
 
 AI 입력으로 운동 조건과 참고 메모가 Gemini에 전송됩니다. 질환명·개인정보는 입력하지 않도록 안내하고, 의료 관련 메모는 자동 계획을 중단합니다. 이 기능은 의료 처방이 아닙니다.
+
